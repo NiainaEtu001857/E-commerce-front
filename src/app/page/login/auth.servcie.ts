@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 export interface User {
   id: string;
@@ -15,14 +15,12 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
-    // Si tu stockes le user dans localStorage, on peut initialiser ici
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
     }
   }
 
-  // Login professionnel
   async login(email: string, password: string): Promise<void> {
     try {
       const response = await axios.post(
@@ -32,13 +30,10 @@ export class AuthService {
       );
       console.log(response);
       
-
-      // Stocker le token si renvoyé
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
 
-      // Stocker les infos user (non sensibles)
       if (response.data.user) {
         localStorage.setItem('user', JSON.stringify(response.data.user));
         this.currentUserSubject.next(response.data.user);
@@ -54,6 +49,29 @@ export class AuthService {
       }
     }
   }
+
+  async registerShop(shopData: any): Promise<void> {
+    try {
+      const response = await axios.post(
+        `${environment.api}/shop/create`, 
+        shopData,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      if (response.data.token) { 
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+      console.log(response);    
+    } catch (error: any) {
+      if (error.response) {
+        throw new Error(error.response.data.message || 'Erreur serveur');
+      } else if (error.request) {
+        throw new Error('Erreur réseau : impossible de joindre le serveur');
+      } else {
+        throw new Error(error.message);
+      }  
+    }
+  } 
 
   logout() {
     localStorage.removeItem('token');

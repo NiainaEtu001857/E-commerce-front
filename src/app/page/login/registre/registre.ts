@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
-import axios from 'axios';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth.servcie';
 
 @Component({
   selector: 'app-registre',
@@ -12,6 +11,8 @@ import { environment } from '../../../environments/environment';
   styleUrl: './registre.css',
 })
 export class Registre {
+  constructor(private authService: AuthService) {}
+  
   selectedProfile: string = 'client';
   user = {
     firstName: '',
@@ -42,34 +43,11 @@ export class Registre {
       alert('Please fill all required fields');
       return;
     }
-
     try {
-      console.log(`${environment.api}/shop/create`);
-      
-      const response = await axios.post(`${environment.api}/shop/create`, this.shop, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-        console.log(response);
-      if (response.data.token) {
-        
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-    }
+      await this.authService.registerShop(this.shop);
+      alert('Login successful!');
     } catch (error: any) {
-      if (error.response) {
-        // La requête a été faite et le serveur a répondu avec un code erreur
-        console.error('Erreur backend:', error.response.data);
-        alert(error.response.data.message);
-      } else if (error.request) {
-        // La requête a été faite mais aucune réponse
-        console.error('Aucune réponse du serveur', error.request);
-        alert('Erreur réseau : impossible de joindre le serveur');
-      } else {
-        console.error('Erreur Axios', error.message);
-        alert('Erreur : ' + error.message);
-      }
+      alert(error.message);
     }
   }
 
