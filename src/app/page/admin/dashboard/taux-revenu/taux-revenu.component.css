@@ -1,0 +1,13 @@
+.card {
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.card-header {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+canvas {
+  max-height: 400px;
+}

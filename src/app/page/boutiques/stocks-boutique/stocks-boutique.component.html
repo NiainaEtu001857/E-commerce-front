@@ -1,0 +1,131 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="header-pretitle">Stock</h6>
+              <h1 class="header-title">Inventaire des produits</h1>
+            </div>
+
+            <div class="col-auto">
+              <a routerLink="/admin/add-product" class="btn btn-primary">
+                + Ajouter un produit
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+
+        <!-- Card header -->
+        <div class="card-header">
+          <div class="row align-items-center">
+
+            <div class="col">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="Rechercher un produit..."
+                [(ngModel)]="searchText"
+              >
+            </div>
+
+            <div class="col-auto">
+              <select class="form-select form-select-sm">
+                <option>Toutes catégories</option>
+                <option>Électronique</option>
+                <option>Vêtements</option>
+                <option>Chaussures</option>
+                <option>Alimentation</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-hover table-nowrap card-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Produit</th>
+                <th>Catégorie</th>
+                <th>Marque</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Statut</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let p of products; let i = index">
+
+                <td class="fw-semibold">{{ p.id }}</td>
+
+                <td>{{ p.name }}</td>
+
+                <td>{{ p.category }}</td>
+
+                <td>{{ p.brand }}</td>
+
+                <td>{{ p.price | currency:'EUR' }}</td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': p.stock > 5,
+                      'bg-warning': p.stock > 0 && p.stock <= 5,
+                      'bg-danger': p.stock === 0
+                    }"
+                  >
+                    {{ p.stock }}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': p.status === 'actif',
+                      'bg-secondary': p.status === 'inactif'
+                    }"
+                  >
+                    {{ p.status }}
+                  </span>
+                </td>
+
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary me-1"
+                          (click)="viewProduct(p)">
+                    <i class="fe fe-eye"></i>
+                  </button>
+
+                  <button class="btn btn-sm btn-outline-warning me-1"
+                          (click)="editProduct(p)">
+                    <i class="fe fe-edit"></i>
+                  </button>
+
+                  <button class="btn btn-sm btn-outline-danger"
+                          (click)="deleteProduct(i)">
+                    <i class="fe fe-trash"></i>
+                  </button>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

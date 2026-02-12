@@ -1,75 +1,169 @@
 <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-5 col-lg-6 col-xl-4 px-lg-6 my-5 align-self-center">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-5 col-lg-6 col-xl-4 px-lg-6 my-5 align-self-center">
+      <p class="text-center">
+        <small class="text-body-secondary text-center mb-5">
+          Don't have an account yet? <a routerLink="/login" >Log in</a>.
+        </small>
+      </p>
+      <!-- Buttons to choose profile -->
+      <div class="col-12 text-center my-4">
+        <button class="btn btn-outline-primary me-2" (click)="selectProfile('client')">Client</button>
+        <button class="btn btn-outline-success" (click)="selectProfile('shop')">Shop</button>
+      </div>
 
-          <!-- Heading -->
-          <h1 class="display-4 text-center mb-3">
-            Sign up
-          </h1>
+      <!-- Client Form -->
+      <form *ngIf="selectedProfile === 'client'" #clientForm="ngForm" (ngSubmit)="submit()">
 
-          <!-- Subheading -->
-          <p class="text-body-secondary text-center mb-5">
-            Free access to our dashboard.
-          </p>
+        <h1 class="display-4 text-center mb-3">Create Client Account</h1>
+        <p class="text-body-secondary text-center mb-5">
+          Start managing your dashboard in minutes.
+        </p>
 
-          <!-- Form -->
-          <form>
+        <div class="row">
+          <div class="col-md-6 form-group mb-3">
+            <label class="form-label">First Name</label>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="user.firstName"
+                  name="firstName"
+                  required
+                  #firstName="ngModel"
+                  placeholder="John">
+            <small class="text-danger" *ngIf="firstName.invalid && firstName.touched">
+              First name is required
+            </small>
+          </div>
 
-            <!-- Email address -->
-            <div class="form-group">
-
-              <!-- Label -->
-              <label class="form-label">
-                Email Address
-              </label>
-
-              <!-- Input -->
-              <input type="email" class="form-control" placeholder="name@address.com">
-
-            </div>
-
-            <!-- Password -->
-            <div class="form-group">
-
-              <!-- Label -->
-              <label class="form-label">
-                Password
-              </label>
-
-              <!-- Input group -->
-              <div class="input-group input-group-merge">
-
-                <!-- Input -->
-                <input class="form-control" type="password" placeholder="Enter your password">
-
-                <!-- Icon -->
-                <span class="input-group-text">
-                  <i class="fe fe-eye"></i>
-                </span>
-
-              </div>
-            </div>
-
-            <!-- Submit -->
-            <button class="btn btn-lg w-100 btn-primary mb-3">
-              Sign up
-            </button>
-
-            <!-- Link -->
-            <div class="text-center">
-              <small class="text-body-secondary text-center">
-                Already have an account? <a href="sign-in-cover.html">Log in</a>.
-              </small>
-            </div>
-
-          </form>
-
+          <div class="col-md-6 form-group mb-3">
+            <label class="form-label">Last Name</label>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="user.lastName"
+                  name="lastName"
+                  required
+                  #lastName="ngModel"
+                  placeholder="Doe">
+            <small class="text-danger" *ngIf="lastName.invalid && lastName.touched">
+              Last name is required
+            </small>
+          </div>
         </div>
-        <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
 
-          <!-- Image -->
-          <div class="bg-cover h-100 min-vh-100 mt-n1 me-n3" style="background-image: url(assets/img/covers/auth-side-cover.jpg);"></div>
-
+        <div class="form-group mb-3">
+          <label class="form-label">Email</label>
+          <input type="email"
+                class="form-control"
+                [(ngModel)]="user.email"
+                name="email"
+                required
+                email
+                #email="ngModel"
+                placeholder="john.doe@example.com">
+          <small class="text-danger" *ngIf="email.invalid && email.touched">
+            Valid email is required
+          </small>
         </div>
-      </div> <!-- / .row -->
+
+        <div class="form-group mb-4">
+          <label class="form-label">Password</label>
+          <input type="password"
+                class="form-control"
+                [(ngModel)]="user.password"
+                name="clientPassword"
+                required
+                #clientPassword="ngModel"
+                placeholder="Enter your password">
+        </div>
+
+        <button class="btn btn-primary w-100"
+                type="submit"
+                [disabled]="clientForm.invalid">
+          Create Client Account
+        </button>
+      </form>
+
+
+      <!-- Shop Form -->
+      <form *ngIf="selectedProfile === 'shop'" #shopForm="ngForm" (ngSubmit)="submitShop()">
+
+        <h1 class="display-4 text-center mb-3">Create Shop Account</h1>
+        <p class="text-body-secondary text-center mb-5">
+          Start managing your shop in minutes.
+        </p>
+
+        <div class="row">
+          <div class="col-md-6 form-group mb-3">
+            <label class="form-label">Shop Name</label>
+            <input type="text"
+                  class="form-control"
+                  [(ngModel)]="shop.name"
+                  name="shopName"
+                  required
+                  #shopName="ngModel"
+                  placeholder="My Awesome Shop">
+          </div>
+
+          <div class="col-md-6 form-group mb-3">
+            <label class="form-label">Email</label>
+            <input type="email"
+                  class="form-control"
+                  [(ngModel)]="shop.email"
+                  name="shopEmail"
+                  required
+                  email
+                  #shopEmail="ngModel"
+                  placeholder="shop@example.com">
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Type</label>
+          <input type="text"
+                class="form-control"
+                [(ngModel)]="shop.type"
+                name="shopType"
+                required
+                #shopType="ngModel"
+                placeholder="Clothing, Electronics">
+        </div>
+
+        <div class="form-group mb-3">
+          <label class="form-label">Description</label>
+          <textarea class="form-control"
+                    [(ngModel)]="shop.description"
+                    name="shopDescription"
+                    rows="3"
+                    required
+                    #shopDescription="ngModel"
+                    placeholder="A short description about your shop"></textarea>
+        </div>
+
+        <div class="form-group mb-4">
+          <label class="form-label">Password</label>
+          <input type="password"
+                class="form-control"
+                [(ngModel)]="shop.password"
+                name="shopPassword"
+                required
+                #shopPassword="ngModel"
+                placeholder="Enter your password">
+        </div>
+
+        <button class="btn btn-success w-100"
+                type="submit"
+                [disabled]="shopForm.invalid">
+          Create Shop Account
+        </button>
+      </form>
+
+
     </div>
+
+    <!-- Image side -->
+    <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
+          <!-- Image -->
+      <div class="bg-cover h-100 min-vh-100 mt-n1 me-n3" style="background-image: url(assets/img/covers/auth-side-cover.jpg);"></div>
+    </div>
+  </div>
+</div>

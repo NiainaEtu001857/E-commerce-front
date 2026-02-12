@@ -1,0 +1,82 @@
+<div class="card p-3 mb-4">
+  <div class="mb-3">
+    <label class="form-label">Property name</label>
+    <input class="form-control" [(ngModel)]="propertyForm.name" placeholder="e.g. Color">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Property type</label>
+    <select class="form-select" [(ngModel)]="propertyForm.type">
+      <option value="" disabled selected>Select type</option>
+      <option value="Text">Text</option>
+      <option value="Number">Number</option>
+      <option value="Select">Select</option>
+      <option value="Date">Date</option>
+    </select>
+  </div>
+
+  <div *ngIf="propertyForm.type === 'Select'" class="mb-2">
+    <div class="input-group">
+      <input class="form-control" placeholder="New option" [(ngModel)]="selectValue">
+      <button class="btn btn-outline-primary" type="button" (click)="addSelectValue()">Add</button>
+    </div>
+
+    <div *ngFor="let v of propertyForm.selectValues; let j = index" class="d-flex mb-2">
+      <input class="form-control me-2" [(ngModel)]="propertyForm.selectValues[j]" placeholder="Option value">
+      <button class="btn btn-outline-danger" type="button" (click)="removePropertySelectValue(j)">✕</button>
+    </div>
+  </div>
+
+  <button class="btn btn-primary w-100 mt-2" type="button" (click)="addProperty()">+ Add property</button>
+</div>
+
+<!-- Properties table -->
+<div class="card mb-3">
+  <div class="card-body p-2">
+    <div style="max-height: 400px; overflow-y: auto;">
+      <table class="table table-borderless table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Value / Options</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of properties; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td><input class="form-control form-control-sm" [(ngModel)]="p.name"></td>
+            <td>
+              <select class="form-select form-select-sm" [(ngModel)]="p.type">
+                <option value="Text">Text</option>
+                <option value="Number">Number</option>
+                <option value="Select">Select</option>
+                <option value="Date">Date</option>
+              </select>
+            </td>
+            <td>
+              <input *ngIf="p.type !== 'Select'" class="form-control form-control-sm" [(ngModel)]="p.value">
+              <div *ngIf="p.type === 'Select'">
+                <div *ngFor="let v of p.values; let j = index" class="d-flex mb-1">
+                  <input class="form-control form-control-sm me-2" [(ngModel)]="p.values[j]">
+                  <button class="btn btn-sm btn-outline-danger" (click)="removePropertyValue(p, j)">✕</button>
+                </div>
+                <div class="input-group input-group-sm">
+                  <input class="form-control" [(ngModel)]="p.newValue" placeholder="New option">
+                  <button class="btn btn-outline-primary" (click)="addValueToProperty(p)">Add</button>
+                </div>
+              </div>
+            </td>
+            <td><button class="btn btn-sm btn-danger" (click)="removeProperty(i)">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex gap-2 mt-3">
+  <button class="btn btn-outline-secondary w-50" type="button" (click)="submitProperties()">Save Properties</button>
+</div>

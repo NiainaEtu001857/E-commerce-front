@@ -1,0 +1,191 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-12">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <h6 class="header-pretitle">
+                Overview
+              </h6>
+              <h1 class="header-title text-truncate">
+                Liste des commandes
+              </h1>
+            </div>
+
+            <div class="col-auto">
+              <button class="btn btn-primary">
+                Exporter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+
+        <!-- Filtres -->
+        <div class="card-header">
+          <div class="row g-3 align-items-center">
+
+            <div class="col-md-5">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="Rechercher par ID, client, produit..."
+                [(ngModel)]="searchText"
+                (input)="applyFilters()"
+              >
+            </div>
+
+            <div class="col-md-3">
+              <select
+                class="form-select"
+                [(ngModel)]="statusFilter"
+                (change)="applyFilters()"
+              >
+                <option value="">Tous statuts</option>
+                <option value="En attente">En attente</option>
+                <option value="Confirmée">Confirmée</option>
+                <option value="Expédiée">Expédiée</option>
+                <option value="Annulée">Annulée</option>
+              </select>
+            </div>
+
+            <div class="col-md-4 text-end">
+              <button class="btn btn-outline-secondary" (click)="clearFilters()">
+                Réinitialiser
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive" *ngIf="orders && orders.length; else emptyState">
+          <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>ID Commande</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Articles</th>
+                <th class="text-end">Total</th>
+                <th>Statut</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let order of orders">
+
+                <td class="fw-semibold">
+                  {{ order.id }}
+                </td>
+
+                <td>
+                  <div class="fw-semibold">{{ order.customer.name }}</div>
+                  <small class="text-muted">{{ order.customer.email }}</small>
+                </td>
+
+                <td>
+                  {{ order.date | date:'dd/MM/yyyy HH:mm' }}
+                </td>
+
+                <td>
+                  <ul class="list-unstyled mb-0">
+                    <li *ngFor="let item of order.items | slice:0:2">
+                      {{ item.quantity }} × {{ item.name }}
+                    </li>
+                    <li *ngIf="order.items.length > 2" class="text-muted">
+                      +{{ order.items.length - 2 }} autres…
+                    </li>
+                  </ul>
+                </td>
+
+                <td class="text-end fw-bold">
+                  {{ order.total | currency:'EUR':'symbol' }}
+                </td>
+
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-warning-subtle text-warning': order.status === 'En attente',
+                      'bg-success-subtle text-success': order.status === 'Confirmée',
+                      'bg-primary-subtle text-primary': order.status === 'Expédiée',
+                      'bg-danger-subtle text-danger': order.status === 'Annulée'
+                    }"
+                  >
+                    {{ order.status }}
+                  </span>
+                </td>
+
+                <td class="text-end">
+                  <div class="dropdown">
+                    <button
+                      class="btn btn-sm btn-light"
+                      data-bs-toggle="dropdown"
+                    >
+                      <i class="fe fe-more-vertical"></i>
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" (click)="viewOrder(order)">
+                        Voir
+                      </a>
+                      <a class="dropdown-item" (click)="editOrder(order)">
+                        Modifier
+                      </a>
+                      <a class="dropdown-item text-danger">
+                        Annuler
+                      </a>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <ng-template #emptyState>
+          <div class="card-body text-center">
+            <p class="text-muted mb-3">Aucune commande trouvée.</p>
+            <button class="btn btn-outline-primary" (click)="refresh()">
+              Rafraîchir
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Footer -->
+        <div class="card-footer d-flex justify-content-between align-items-center">
+          <small class="text-muted">
+            {{ orders.length }} commande(s)
+          </small>
+
+          <nav>
+            <ul class="pagination mb-0">
+              <li class="page-item disabled">
+                <a class="page-link">Précédent</a>
+              </li>
+              <li class="page-item active">
+                <a class="page-link">1</a>
+              </li>
+              <li class="page-item">
+                <a class="page-link">Suivant</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
