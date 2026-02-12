@@ -12,8 +12,30 @@
             Free access to our dashboard.
           </p>
 
+          <!-- Switch buttons -->
+        <div class="d-flex justify-content-center mb-4">
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            [class.btn-success]="userType === 'shop'"
+            [class.btn-outline-success]="userType !== 'shop'"
+            (click)="setUserType('shop')">
+            Shop
+          </button>
+
+          <button
+            type="button"
+            class="btn"
+            [class.btn-primary]="userType === 'client'"
+            [class.btn-outline-primary]="userType !== 'client'"
+            (click)="setUserType('client')">
+            Client
+          </button>
+        </div>
+
+
           <!-- Form -->
-          <form>
+          <form (ngSubmit)="login()">
 
             <!-- Email address -->
             <div class="form-group">
@@ -23,8 +45,13 @@
                 Email Address
               </label>
 
-              <!-- Input -->
-              <input type="email" class="form-control" placeholder="name@address.com">
+             <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="email"
+              name="email"
+              [placeholder]="userType === 'admin'? 'admin@gmain.com': userType === 'shop'? 'shop@gmain.com': 'client@gmain.com'">
+
 
             </div>
 
@@ -53,7 +80,13 @@
               <div class="input-group input-group-merge">
 
                 <!-- Input -->
-                <input class="form-control" type="password" placeholder="Enter your password">
+                <input
+                  class="form-control"
+                  type="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  placeholder="Enter your password">
+
 
                 <!-- Icon -->
                 <span class="input-group-text">
@@ -64,7 +97,7 @@
             </div>
 
             <!-- Submit -->
-            <button type="button" routerLink="/admin" class="btn btn-lg w-100 btn-primary mb-3">
+            <button type="submit" class="btn btn-lg w-100 btn-primary mb-3">
               Sign in
             </button>
 
@@ -79,10 +112,8 @@
 
         </div>
         <div class="col-12 col-md-7 col-lg-6 col-xl-8 d-none d-lg-block">
-
           <!-- Image -->
           <div class="bg-cover h-100 min-vh-100 mt-n1 me-n3" style="background-image: url(assets/img/covers/auth-side-cover.jpg);"></div>
-
         </div>
       </div> <!-- / .row -->
     </div>

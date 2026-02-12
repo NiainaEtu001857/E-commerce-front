@@ -1,0 +1,109 @@
+<div class="tab-content">
+  <div class="tab-pane fade show active">
+
+    <div class="card">
+
+      <!-- Header -->
+      <div class="card-header">
+        <div class="row align-items-center">
+
+          <div class="col">
+            <div class="input-group input-group-flush input-group-merge input-group-reverse">
+              <input
+                class="form-control"
+                type="search"
+                placeholder="Rechercher une commande..."
+                [(ngModel)]="searchText"
+              >
+              <span class="input-group-text">
+                <i class="fe fe-search"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-auto me-n3">
+            <select class="form-select form-select-sm">
+              <option>Tous les statuts</option>
+              <option>En attente</option>
+              <option>Confirmée</option>
+              <option>Expédiée</option>
+              <option>Annulée</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-nowrap card-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>Client</th>
+              <th>Email</th>
+              <th>Date</th>
+              <th>Statut</th>
+              <th>Total</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let order of orders; let i = index">
+
+              <td>
+                <input type="checkbox">
+              </td>
+
+              <td class="fw-semibold">{{ order.id }}</td>
+
+              <td>{{ order.customer.name }}</td>
+
+              <td class="text-muted">{{ order.customer.email }}</td>
+
+              <td>{{ order.date | date:'dd/MM/yyyy HH:mm' }}</td>
+
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-warning': order.status === 'En attente',
+                    'bg-success': order.status === 'Confirmée',
+                    'bg-info': order.status === 'Expédiée',
+                    'bg-danger': order.status === 'Annulée'
+                  }"
+                >
+                  {{ order.status }}
+                </span>
+              </td>
+
+              <td class="fw-bold">
+                {{ order.total | currency:'EUR' }}
+              </td>
+
+              <td class="text-end">
+                <button
+                  class="btn btn-sm btn-outline-primary me-1"
+                  (click)="viewOrder(order)"
+                >
+                  <i class="fe fe-eye"></i>
+                </button>
+
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="deleteOrder(i)"
+                >
+                  <i class="fe fe-trash"></i>
+                </button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

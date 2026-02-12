@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Layout } from './layout';
+import { TauxRevenuComponent } from './taux-revenu.component';
 
-describe('Layout', () => {
-  let component: Layout;
-  let fixture: ComponentFixture<Layout>;
+describe('TauxRevenuComponent', () => {
+  let component: TauxRevenuComponent;
+  let fixture: ComponentFixture<TauxRevenuComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Layout]
+      imports: [TauxRevenuComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Layout);
+    fixture = TestBed.createComponent(TauxRevenuComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
