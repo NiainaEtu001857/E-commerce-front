@@ -23,7 +23,7 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <form class="mt-3">
+                    <form class="mt-3" (ngSubmit)="submit($event)">
 
                     <div class="row g-3">
 
@@ -34,6 +34,8 @@
                             type="text"
                             class="form-control"
                             placeholder="Ex: Télévision Samsung"
+                            [(ngModel)]="productForm.name"
+                            name="name"
                             required
                         >
                         </div>
@@ -41,12 +43,17 @@
                         <!-- Catégorie -->
                         <div class="col-12 col-md-6">
                         <label class="form-label">Catégorie</label>
-                        <select class="form-select" required>
+                        <select
+                            class="form-select"
+                            [(ngModel)]="productForm.category"
+                            name="category"
+                            required
+                        >
                             <option value="">Choisir une catégorie</option>
-                            <option>Électronique</option>
-                            <option>Vêtements</option>
-                            <option>Alimentation</option>
-                            <option>Chaussures</option>
+                            <option value="Électronique">Électronique</option>
+                            <option value="Vêtements">Vêtements</option>
+                            <option value="Alimentation">Alimentation</option>
+                            <option value="Chaussures">Chaussures</option>
                         </select>
                         </div>
 
@@ -57,7 +64,8 @@
                             type="number"
                             class="form-control"
                             placeholder="0.00"
-                            required
+                            [(ngModel)]="productForm.price"
+                            name="price"
                         >
                         </div>
 
@@ -68,7 +76,8 @@
                             type="number"
                             class="form-control"
                             placeholder="Quantité"
-                            required
+                            [(ngModel)]="productForm.stock"
+                            name="stock"
                         >
                         </div>
 
@@ -79,6 +88,9 @@
                             type="text"
                             class="form-control"
                             placeholder="Ex: Nike, Samsung"
+                            [(ngModel)]="productForm.brand"
+                            name="brand"
+                            required
                         >
                         </div>
 
@@ -89,22 +101,45 @@
                             class="form-control"
                             rows="4"
                             placeholder="Description du produit"
+                            [(ngModel)]="productForm.description"
+                            name="description"
                         ></textarea>
                         </div>
 
                         <!-- Image principale -->
                         <div class="col-12 col-md-6">
                         <label class="form-label">Image principale</label>
-                        <input type="file" class="form-control">
+                        <input
+                            type="file"
+                            class="form-control"
+                            name="image"
+                            (change)="onImageSelected($event)"
+                        >
                         </div>
 
                         <!-- Statut -->
                         <div class="col-12 col-md-6">
                         <label class="form-label">Statut</label>
-                        <select class="form-select">
+                        <select
+                            class="form-select"
+                            [(ngModel)]="productForm.status"
+                            name="status"
+                        >
                             <option value="actif">Actif</option>
                             <option value="inactif">Inactif</option>
                         </select>
+                        </div>
+
+                        <!-- Unité de base -->
+                        <div class="col-12 col-md-6">
+                        <label class="form-label">Unité de base</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Ex: pièce, kg, litre"
+                            [(ngModel)]="productForm.base_unity"
+                            name="base_unity"
+                        >
                         </div>
 
                     </div>
@@ -113,31 +148,31 @@
                     <hr class="my-4">
 
                     <h5>Attributs spécifiques (optionnel)</h5>
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Clé (ex: couleur)"
-                        >
+                    <div class="row g-3 align-items-end mb-2" *ngFor="let attr of attributes; let i= index">
+                        <div class="col-md-5">
+                        <label class="form-label">Clé</label>
+                        <input type="text" class="form-control" [(ngModel)]="attributes[i].key"
+                        [name]="'attr_key_' + i">
                         </div>
-                        <div class="col-md-6">
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Valeur (ex: rouge)"
-                        >
+                        <div class="col-md-5">
+                        <label class="form-label">Valeur</label>
+                        <input type="text" class="form-control" [(ngModel)]="attributes[i].value"
+                        [name]="'attr_value_' + i">
                         </div>
-                    </div>
-
+                        <div class="col-md-2 d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary w-50"
+                        (click)="addAttributeRow()">+</button>
+                        <button type="button" class="btn btn-outline-danger w-50"
+                        (click)="removeAttributeRow(i)">-</button>
+                        </div>
+                        </div>
                     <!-- Boutons -->
                     <div class="mt-4 text-end">
                         <button type="reset" class="btn btn-outline-secondary me-2">
                         Annuler
                         </button>
-                        <button type="submit" class="btn btn-primary">
-                        Enregistrer le produit
+                        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                        {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer le produit' }}
                         </button>
                     </div>
 

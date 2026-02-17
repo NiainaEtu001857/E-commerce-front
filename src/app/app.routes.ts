@@ -94,7 +94,14 @@ export const routes: Routes = [
                 loadComponent() {
                     return import('./page/boutiques/commandes-boutique/commandes-historique/commandes-historique.component').then(m => m.CommandesHistoriqueComponent);
                 }
-            }
+            },
+            {
+                path: 'produits/stocks/ajouter',
+                loadComponent()
+                {
+                    return import('./page/boutiques/stocks-boutique/ajouter/ajouter-stock.component').then(m => m.AjouterStockComponent);
+                },
+            },
         ]
     },
     { path: 'login' , component: Login},

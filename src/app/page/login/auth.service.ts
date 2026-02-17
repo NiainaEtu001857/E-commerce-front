@@ -1,70 +1,82 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import axios from 'axios';
+import { firstValueFrom, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { User } from '../../interface/User.interface';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+
+export interface User {
+  id: string;
+  email: string;
+  role: string;
+}
+
+export interface Shop
+{
+   name: string;
+   email: string;
+   password: string;
+   phone?: string;
+   address?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
+      try{
+       this.currentUserSubject.next(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem('user');
+      }
     }
   }
 
   async login(email: string, password: string): Promise<void> {
-    try {
-      const response = await axios.post(
-        `${environment.api}/shop/login`,
-        { email, password },
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-      console.log(response);
-      
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+   try {
+    const response = await firstValueFrom(
+      this.http.post<{ token?: string; user?: User }>(
+      `${environment.api}/shop/login`,
+      { email, password }
+      )
+    ); 
+    
+    if (!response.token || !response.user) {
+        throw new Error('Réponse invalide du serveur');
       }
 
-      if (response.data.user) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        this.currentUserSubject.next(response.data.user);
-      }
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      this.currentUserSubject.next(response.user);
 
-    } catch (error: any) {
-      if (error.response) {
-        throw new Error(error.response.data.message || 'Erreur serveur');
-      } else if (error.request) {
-        throw new Error('Erreur réseau : impossible de joindre le serveur');
-      } else {
-        throw new Error(error.message);
-      }
+     console.log(response);
+    } catch (error: unknown) {
+      this.handleHttpError(error);
     }
   }
 
-  async registerShop(shopData: any): Promise<void> {
+  async registerShop(shopData: Shop): Promise<void> {
     try {
-      const response = await axios.post(
-        `${environment.api}/shop/create`, 
-        shopData,
-        { headers: { 'Content-Type': 'application/json' } }
+        const response = await firstValueFrom(
+        this.http.post<{ token?: string; user?: User}>(
+         `${environment.api}/shop/create`, 
+          shopData
+        )
       );
-      if (response.data.token) { 
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      if (!response.token || !response.user) {
+        throw new Error('Réponse invalide du serveur');
       }
-      return response.data;  
-    } catch (error: any) {
-      if (error.response) {
-        throw new Error(error.response.data.message || 'Erreur serveur');
-      } else if (error.request) {
-        throw new Error('Erreur réseau : impossible de joindre le serveur');
-      } else {
-        throw new Error(error.message);
-      }  
+
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        this.currentUserSubject.next(response.user);
+      console.log(response);    
+    } catch (error: unknown) {
+      this.handleHttpError(error);
     }
   } 
 
@@ -81,4 +93,21 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
+
+  private handleHttpError(error: unknown)
+  { 
+    if (error instanceof HttpErrorResponse)
+      {
+        if (error.status === 0)
+          throw new Error('Erreur réseau : impossible de joindre le serveur');
+        throw new Error(error.error?.message || 'Erreur serveur');
+      }
+      if(error instanceof Error)
+      {
+        throw error;
+      }
+      throw new Error('Une erreur inattendue est survenue');
+  }
+
 }

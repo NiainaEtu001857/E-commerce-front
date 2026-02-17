@@ -11,12 +11,17 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
+
 export class Login {
 
   userType: 'shop' | 'client' | 'admin' = 'admin';
   email = 'admin@gmail.com';
   password = 'adimin';
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router 
+
+  ) {}
 
 
   setUserType(type: 'shop' | 'client' | 'admin') {
@@ -44,7 +49,7 @@ export class Login {
     }
     try {
       await this.authService.login(this.email, this.password);
-      alert('Login successful!');
+      await this.router.navigate(['/boutiques']);
     } catch (error: any) {
       alert(error.message);
     }

@@ -11,9 +11,6 @@ import { AuthService } from '../auth.service';
   styleUrl: './registre.css',
 })
 export class Registre {
-submit() {
-throw new Error('Method not implemented.');
-}
   constructor(private authService: AuthService) {}
   
   selectedProfile: string = 'client';
@@ -36,17 +33,19 @@ throw new Error('Method not implemented.');
     this.selectedProfile = profile;
   }
 
+  submit() {
+    console.log('Client Data:', this.user);
+    
+  }
 
   async submitShop() {
     if (!this.shop.name || !this.shop.email || !this.shop.type || !this.shop.description || !this.shop.password) {
-      
       alert('Please fill all required fields');
       return;
     }
     try {
-      const data = await this.authService.registerShop(this.shop);
-      Router.navigate(['/product-properties'] , { state: { shop: data.id } });
-      alert('Shop registration successful!');
+      await this.authService.registerShop(this.shop);
+      alert('Login successful!');
     } catch (error: any) {
       alert(error.message);
     }
