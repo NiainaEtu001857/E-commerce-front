@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { min } from 'rxjs';
 
 @Component({
   selector: 'app-product-properties',
@@ -11,7 +12,10 @@ import { FormsModule } from '@angular/forms';
 export class ProductPropertiesComponent {
   propertyForm = {
     name: '',
+    brand: '',
     type: '',
+    min_quantity: 0,
+    base_unity: '',
     selectValues: [] as string[]
   };
 
@@ -39,7 +43,7 @@ export class ProductPropertiesComponent {
       values: this.propertyForm.type === 'Select' ? [...this.propertyForm.selectValues] : []
     });
 
-    this.propertyForm = { name: '', type: '', selectValues: [] };
+    this.propertyForm = { name: '',brand: '',type: '',min_quantity: 0, base_unity: '', selectValues: [] };
   }
 
   removeProperty(index: number) {
@@ -60,6 +64,5 @@ export class ProductPropertiesComponent {
 
   submitProperties() {
     console.log('Properties saved:', this.properties);
-    // Ici tu peux envoyer vers le backend ou router vers la page suivante
   }
 }

@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import { environment } from '../../../environments/environment';
-
-export interface User {
-  id: string;
-  email: string;
-  role: string;
-}
+import { User } from '../../interface/User.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -61,7 +56,7 @@ export class AuthService {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
       }
-      console.log(response);    
+      return response.data;  
     } catch (error: any) {
       if (error.response) {
         throw new Error(error.response.data.message || 'Erreur serveur');
