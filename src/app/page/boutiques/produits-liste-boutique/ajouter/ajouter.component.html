@@ -56,45 +56,17 @@
                             <option value="Chaussures">Chaussures</option>
                         </select>
                         </div>
-
-                        <!-- Prix -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Prix</label>
+                                             <!-- Image principale -->
+                        <div class="col-12 col-md-6">
+                        <label class="form-label">Image principale</label>
                         <input
-                            type="number"
+                            type="file"
                             class="form-control"
-                            placeholder="0.00"
-                            [(ngModel)]="productForm.price"
-                            name="price"
+                            name="image"
+                            (change)="onImageSelected($event)"
                         >
                         </div>
-
-                        <!-- Stock -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Stock</label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            placeholder="Quantité"
-                            [(ngModel)]="productForm.stock"
-                            name="stock"
-                        >
-                        </div>
-
-                        <!-- Marque -->
-                        <div class="col-12 col-md-4">
-                        <label class="form-label">Marque</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            placeholder="Ex: Nike, Samsung"
-                            [(ngModel)]="productForm.brand"
-                            name="brand"
-                            required
-                        >
-                        </div>
-
-                        <!-- Description -->
+                                              <!-- Description -->
                         <div class="col-12">
                         <label class="form-label">Description</label>
                         <textarea
@@ -106,42 +78,28 @@
                         ></textarea>
                         </div>
 
-                        <!-- Image principale -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Image principale</label>
-                        <input
-                            type="file"
-                            class="form-control"
-                            name="image"
-                            (change)="onImageSelected($event)"
-                        >
-                        </div>
-
-                        <!-- Statut -->
-                        <div class="col-12 col-md-6">
-                        <label class="form-label">Statut</label>
-                        <select
-                            class="form-select"
-                            [(ngModel)]="productForm.status"
-                            name="status"
-                        >
-                            <option value="actif">Actif</option>
-                            <option value="inactif">Inactif</option>
-                        </select>
-                        </div>
-
                         <!-- Unité de base -->
                         <div class="col-12 col-md-6">
                         <label class="form-label">Unité de base</label>
                         <input
                             type="text"
                             class="form-control"
-                            placeholder="Ex: pièce, kg, litre"
+                            placeholder="Ex: prestation , kg, litre"
                             [(ngModel)]="productForm.base_unity"
                             name="base_unity"
                         >
                         </div>
-
+                    <!-- Quantité-->
+                        <div class="col-12 col-md-6">
+                        <label class="form-label">Quantité minimale de commande</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Ex: 1, 20, 100"
+                            [(ngModel)]="productForm.min_quantity"
+                            name="base_unity"
+                        >
+                        </div>
                     </div>
 
                     <!-- Attributs dynamiques -->
@@ -152,11 +110,13 @@
                         <div class="col-md-5">
                         <label class="form-label">Clé</label>
                         <input type="text" class="form-control" [(ngModel)]="attributes[i].key"
+                        placeholder="Ex: Marque, Couleur ..."
                         [name]="'attr_key_' + i">
                         </div>
                         <div class="col-md-5">
                         <label class="form-label">Valeur</label>
                         <input type="text" class="form-control" [(ngModel)]="attributes[i].value"
+                        placeholder="Ex: Samsung, Rouge ..."
                         [name]="'attr_value_' + i">
                         </div>
                         <div class="col-md-2 d-flex gap-2">

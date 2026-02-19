@@ -20,13 +20,10 @@ export class AjouterComponent {
   productForm = {
     name: '',
     category: '',
-    price: null as number | null,
-    stock: null as number | null,
-    brand: '',
+    min_quantity: null as number | null,
     description: '',
     image: null as File | null,
-    status: 'actif',
-    base_unity: 'litre',
+    base_unity: '',
   };
 
   constructor(private http: HttpClient) {}
@@ -65,14 +62,14 @@ export class AjouterComponent {
       return;
     }
 
-    if (!this.productForm.name || !this.productForm.brand || !this.productForm.category) {
+    if (!this.productForm.name || !this.productForm.category) {
       alert('Veuillez remplir les champs obligatoires.');
       return;
     }
 
-    const minQuantity = Number(this.productForm.stock ?? 1);
+    const minQuantity = Number(this.productForm.min_quantity?? 1);
     if (!Number.isFinite(minQuantity) || minQuantity <= 0) {
-      alert('Le stock doit etre superieur a 0.');
+      alert('La quantité minimal de la commande doit etre superieur a 0.');
       return;
     }
 
@@ -90,17 +87,14 @@ export class AjouterComponent {
 
     const payload = {
       name: this.productForm.name.trim(),
-      brand: this.productForm.brand.trim(),
       type: this.productForm.category,
-      min_quantity: minQuantity,
+      min_quantity: this.productForm.min_quantity,
       base_unity: this.productForm.base_unity || 'Unité',
-      price: this.productForm.price ?? null,
-      stock: this.productForm.stock ?? null,
-      description: this.productForm.description?.trim() || null,
+      detail: this.productForm.description?.trim() || null,
       image_name: this.productForm.image?.name || null,
-      status: this.productForm.status || null,
       attributes: cleanedAttributes,
     };
+    console.log(payload);
 
     this.isSubmitting = true;
     try {
@@ -119,12 +113,9 @@ export class AjouterComponent {
       this.productForm = {
         name: '',
         category: '',
-        price: null,
-        stock: null,
-        brand: '',
+        min_quantity: null,
         description: '',
         image: null,
-        status: 'actif',
         base_unity: 'piece',
       };
       this.attributes = [{ key: '', value: '' }];
