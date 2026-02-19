@@ -14,9 +14,7 @@ type ServiceItem = {
   name?: string;
   ref?: string;
   type?: string;
-  brand?: string;
-  description?: string;
-  price?: number;
+  detail?: string;
   min_quantity?: number;
   base_unity?: string;
   attributes?: ServiceAttribute[];
@@ -77,8 +75,7 @@ export class ProduitsListeBoutiqueComponent implements OnInit {
         service.name,
         service.ref,
         service.type,
-        service.brand,
-        service.description,
+        service.detail
       ];
       return values.some((value) => String(value ?? '').toLowerCase().includes(term));
     });

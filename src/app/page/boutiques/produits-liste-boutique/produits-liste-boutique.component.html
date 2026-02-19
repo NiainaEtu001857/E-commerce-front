@@ -49,9 +49,7 @@
                     <th>Produit</th>
                     <th>Reference</th>
                     <th>Type</th>
-                    <th>Marque</th>
                     <th>Description</th>
-                    <th>Prix</th>
                     <th>Quantite min</th>
                     <th>Unite</th>
                     <th>Attributs</th>
@@ -78,9 +76,7 @@
                     <td class="item-name">{{ service.name || '-' }}</td>
                     <td>{{ service.ref || '-' }}</td>
                     <td>{{ service.type || '-' }}</td>
-                    <td>{{ service.brand || '-' }}</td>
-                    <td>{{ service.description || '-' }}</td>
-                    <td>{{ service.price ?? '-' }}</td>
+                    <td>{{ service.detail|| '-' }}</td>
                     <td>{{ service.min_quantity ?? '-' }}</td>
                     <td>{{ service.base_unity || '-' }}</td>
                     <td>{{ formatAttributes(service.attributes) }}</td>
