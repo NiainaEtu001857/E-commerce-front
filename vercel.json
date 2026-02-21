@@ -1,6 +1,6 @@
 {
     "framework": "angular",
-    "installCommad": "npm ci",
+    "installCommand": "npm ci",
     "buildCommand": "npm run build",
     "outputDirectory": "dist/E-commerce-front/browser"
 }
