@@ -1,6 +1,6 @@
 
 
 export const environment = {
-  api:'http://localhost:3000',
+  api:'https://mellow-essence-production.up.railway.app',
   production: true
 };
