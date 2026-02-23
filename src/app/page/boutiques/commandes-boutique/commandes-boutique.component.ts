@@ -35,6 +35,7 @@ export class CommandesBoutiqueComponent implements OnInit {
   
   searchText: string = '';
   statusFilter: string = '';
+  selectedOrder: Order | null = null;
 
   orders: Order[] = [];
   allOrders: Order[] = [];
@@ -118,9 +119,7 @@ export class CommandesBoutiqueComponent implements OnInit {
 
   // 👁️ Voir commande
   viewOrder(order: Order): void {
-    console.log('Voir commande :', order);
-    // Exemple :
-    // this.router.navigate(['/boutique/commandes', order.id]);
+    this.selectedOrder = order;
   }
 
   // ✏️ Modifier commande
@@ -128,6 +127,10 @@ export class CommandesBoutiqueComponent implements OnInit {
     console.log('Modifier commande :', order);
     // Exemple :
     // this.router.navigate(['/boutique/commandes/edit', order.id]);
+  }
+
+  closeOrderDetails(): void {
+    this.selectedOrder = null;
   }
 
 }
