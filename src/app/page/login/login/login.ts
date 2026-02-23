@@ -29,12 +29,12 @@ export class Login {
 
     switch (type) {
       case 'shop':
-        this.email = 'shop@gmain.com';
+        this.email = 'shop@gmail.com';
         this.password = 'shop'
         break;
       case 'client':
-        this.email = 'client@gmain.com';
-        this.password = 'client'
+        this.email = 'john@gmail.com';
+        this.password = 'john'
         break
       default:
         this.email = 'admin@gmail.com';
@@ -48,8 +48,18 @@ export class Login {
       return;
     }
     try {
-      await this.authService.login(this.email, this.password);
-      await this.router.navigate(['/boutiques']);
+      await this.authService.login(this.email, this.password , this.userType);
+      switch (localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).role : null) {
+        case 'SHOP':
+          await this.router.navigate(['/boutiques']);
+          break;  
+        case 'ADMIN':
+          await this.router.navigate(['/admin']);
+          break;  
+        default:
+           await this.router.navigate(['/client']);
+          break;
+      }
     } catch (error: any) {
       alert(error.message);
     }

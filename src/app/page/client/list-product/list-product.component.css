@@ -1,0 +1,16 @@
+.card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.card-body p {
+  font-size: 0.8rem;
+}
+
+.card-img-top {
+  transition: transform 0.3s;
+}
+
+.card-img-top:hover {
+  transform: scale(1.05);
+}

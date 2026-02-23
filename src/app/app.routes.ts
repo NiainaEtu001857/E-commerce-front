@@ -3,6 +3,7 @@ import { Login } from './page/login/login/login';
 import { Registre } from './page/login/registre/registre';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { BoutiqueLayoutComponent } from './layouts/boutique-layout/boutique-layout.component';
+import { ClientLayoutComponent } from './layouts/client-layout/client-layout.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -102,6 +103,25 @@ export const routes: Routes = [
                     return import('./page/boutiques/stocks-boutique/ajouter/ajouter-stock.component').then(m => m.AjouterStockComponent);
                 },
             },
+        ]
+    },
+    {
+        path: 'client',
+        component: ClientLayoutComponent,
+        children: [
+            {
+                path: '',
+                loadComponent() {
+                    return import('./page/client/choose-shop/choose-shop.component').then(m => m.ChooseShopComponent);
+                }   
+            },
+
+            {
+                path: 'shop/:id',
+                loadComponent() {
+                    return import('./page/client/list-product/list-product.component').then(m => m.ListProductComponent);
+                }
+            }
         ]
     },
     { path: 'login' , component: Login},

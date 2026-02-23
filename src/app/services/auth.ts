@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 })
 export class Auth {
   private http = inject(HttpClient);
-  private API = `${environment.api}/login`;
+  private API = `${environment.api}/auth`;
 
   login(data: {email: string; password: string})
   {
