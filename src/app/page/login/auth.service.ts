@@ -2,20 +2,13 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Shop } from '../../interface/shops.interface';
 
 export interface User {
   id: string;
+  name: string;
   email: string;
   role: string;
-}
-
-export interface Shop
-{
-   name: string;
-   email: string;
-   password: string;
-   phone?: string;
-   address?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -35,16 +28,49 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<void> {
-   try {
-    const response = await firstValueFrom(
-      this.http.post<{ token?: string; user?: User }>(
-      `${environment.api}/shop/login`,
-      { email, password }
-      )
-    ); 
-    
-    if (!response.token || !response.user) {
+  async registerClient(clientData: { name: string; email: string; password: string; }): Promise<void> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ token?: string; user?: User}>(
+          `${environment.api}/auth/register`, 
+          clientData
+        )
+      ); 
+    } catch (error: unknown) {
+      this.handleHttpError(error);
+    }
+  }
+
+
+  async login(email: string, password: string, role: string): Promise<void> {
+    try {
+      if (!email || !password) {
+        alert('Please fill all required fields');
+        return;
+      }
+
+      let response: { token?: string; user?: User };
+
+      if (role === 'client') {
+        response = await firstValueFrom(
+          this.http.post<{ token?: string; user?: User }>(
+            `${environment.api}/auth/login`,
+            { email, password }
+          )
+        );
+      } else if (role === 'shop') {
+        response = await firstValueFrom(
+          this.http.post<{ token?: string; user?: User }>(
+            `${environment.api}/shop/login`,
+            { email, password }
+          )
+        );
+      } else {
+        alert('Invalid role selected');
+        return;
+      }
+
+      if (!response.token || !response.user) {
         throw new Error('Réponse invalide du serveur');
       }
 
@@ -52,11 +78,11 @@ export class AuthService {
       localStorage.setItem('user', JSON.stringify(response.user));
       this.currentUserSubject.next(response.user);
 
-     console.log(response);
     } catch (error: unknown) {
       this.handleHttpError(error);
     }
   }
+
 
   async registerShop(shopData: Shop): Promise<void> {
     try {
@@ -109,5 +135,4 @@ export class AuthService {
       }
       throw new Error('Une erreur inattendue est survenue');
   }
-
 }

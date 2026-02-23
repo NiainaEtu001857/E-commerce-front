@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../auth.service';
+import { email } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-registre',
@@ -33,9 +34,16 @@ export class Registre {
     this.selectedProfile = profile;
   }
 
-  submit() {
-    console.log('Client Data:', this.user);
-    
+  async submit() {
+    if (!this.user.firstName || !this.user.lastName || !this.user.email || !this.user.password) {
+      alert('Please fill all required fields');
+      return;
+    }
+    const name = `${this.user.firstName} ${this.user.lastName}`;
+    await this.authService.registerClient({ name, email: this.user.email, password: this.user.password })
+      .then(() => alert('Login successful!'))
+      .catch((error: any) => alert(error.message));
+    this.user = { firstName: '', lastName: '', email: '', password: '' }; 
   }
 
   async submitShop() {
