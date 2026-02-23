@@ -39,14 +39,18 @@ export class ChooseShopComponent implements OnInit {
         Authorization: `Bearer ${token || ''}`,
       });
       const response: any = await this.http
-        .get(`${environment.api}/shop`, {
+        .get(`${environment.api}/shop/shops`, {
           headers,
           params: { page: this.page, limit: this.limit },
         })
         .toPromise();
+        console.log(response);
 
-      this.shops = [...response.shops];
-      this.totalPages = response.totalPages;
+
+
+
+      this.shops = Array.isArray(response) ? response: [];
+      this.totalPages = 1;
 
       this.cdr.markForCheck();
 
