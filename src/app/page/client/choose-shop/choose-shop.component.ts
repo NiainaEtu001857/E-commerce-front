@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Injectable, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import axios from 'axios';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -22,7 +22,11 @@ export class ChooseShopComponent implements OnInit {
   limit: number = 12;
   totalPages: number = 0;
 
-  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadShops();
@@ -31,17 +35,22 @@ export class ChooseShopComponent implements OnInit {
   async loadShops(): Promise<void> {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${environment.api}/shop`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { page: this.page, limit: this.limit }
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token || ''}`,
       });
+      const response: any = await this.http
+        .get(`${environment.api}/shop`, {
+          headers,
+          params: { page: this.page, limit: this.limit },
+        })
+        .toPromise();
 
-      this.shops = [...response.data.shops];  
-      this.totalPages = response.data.totalPages;
+      this.shops = [...response.shops];
+      this.totalPages = response.totalPages;
 
       this.cdr.markForCheck();
 
-      console.log('Shops chargés :', response.data);
+      console.log('Shops chargés :', response);
     } catch (error) {
       console.error('Erreur lors du chargement des shops', error);
     }

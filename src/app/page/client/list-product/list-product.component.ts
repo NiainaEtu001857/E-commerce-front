@@ -1,6 +1,6 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import axios from 'axios';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -25,7 +25,8 @@ export class ListProductComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef  
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -36,17 +37,22 @@ export class ListProductComponent implements OnInit {
   async loadServices(id?: any) {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${environment.api}/shop/services/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { page: this.page, limit: this.limit, shopId: id },
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token || ''}`,
       });
-      this.services = [...response.data.services]; 
-      this.shop = { ...response.data.shop };
-      this.totalPages = response.data.totalPages;
+      const response: any = await this.http
+        .get(`${environment.api}/shop/services/${id}`, {
+          headers,
+          params: { page: this.page, limit: this.limit, shopId: id },
+        })
+        .toPromise();
+      this.services = [...response.services];
+      this.shop = { ...response.shop };
+      this.totalPages = response.totalPages;
 
       this.cdr.markForCheck();
 
-      console.log('Services chargés:', response.data);
+      console.log('Services chargés:', response);
     } catch (error) {
       console.error('Erreur lors du chargement des services', error);
     }
