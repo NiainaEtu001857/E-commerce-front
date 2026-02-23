@@ -1,22 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, Injectable, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Injectable,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-choose-shop',
-  standalone: true,                      
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './choose-shop.component.html',
   styleUrls: ['./choose-shop.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush 
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 @Injectable({ providedIn: 'root' })
 export class ChooseShopComponent implements OnInit {
-
   shops: any[] = [];
   page: number = 1;
   limit: number = 12;
@@ -38,23 +43,17 @@ export class ChooseShopComponent implements OnInit {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token || ''}`,
       });
-      const response: any = await this.http
-        .get(`${environment.api}/shop/shops`, {
+
+      const response: any = await firstValueFrom(
+        this.http.get(`${environment.api}/client/shops`, {
           headers,
           params: { page: this.page, limit: this.limit },
         })
-        .toPromise();
-        console.log(response);
+      );
 
-
-
-
-      this.shops = Array.isArray(response) ? response: [];
+      this.shops = Array.isArray(response) ? response : [];
       this.totalPages = 1;
-
       this.cdr.markForCheck();
-
-      console.log('Shops chargés :', response);
     } catch (error) {
       console.error('Erreur lors du chargement des shops', error);
     }

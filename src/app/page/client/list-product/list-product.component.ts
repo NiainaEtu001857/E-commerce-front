@@ -1,5 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,14 +15,13 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-list-product',
-  standalone: true,                 // si Angular v14+ pour imports dans le component
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './list-product.component.html',
-  styleUrls: ['./list-product.component.css'], // attention : "styleUrls" et pas "styleUrl"
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./list-product.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListProductComponent implements OnInit {
-
   @Output() addToCartEvent = new EventEmitter<any>();
 
   shop: any = null;
@@ -52,7 +58,7 @@ export class ListProductComponent implements OnInit {
         Authorization: `Bearer ${token || ''}`,
       });
       const response: any = await firstValueFrom(
-        this.http.get(`${environment.api}/shop/service/services/${id}`, {
+        this.http.get(`${environment.api}/client/shop/${id}/services`, {
           headers,
           params: { page: this.page, limit: this.limit, shopId: id },
         })
@@ -63,8 +69,6 @@ export class ListProductComponent implements OnInit {
       this.totalPages = Number(response?.totalPages) || 1;
 
       this.cdr.markForCheck();
-
-      console.log('Services chargés:', response);
     } catch (error) {
       this.services = [];
       this.shop = null;
