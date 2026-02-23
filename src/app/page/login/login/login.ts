@@ -14,9 +14,9 @@ import { AuthService } from '../auth.service';
 
 export class Login {
 
-  userType: 'shop' | 'client' | 'admin' = 'admin';
-  email = 'admin@gmail.com';
-  password = 'adimin';
+  userType: 'shop' | 'client' | 'admin' = 'client';
+  email = '';
+  password = '';
   constructor(
     private authService: AuthService,
     private router: Router 
@@ -42,6 +42,7 @@ export class Login {
         break;
     }
   }
+
   async login() {
     if (!this.email || !this.password) {
       alert('Please fill all required fields');

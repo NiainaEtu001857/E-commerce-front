@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../auth.service';
-import { email } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-registre',
@@ -12,7 +11,7 @@ import { email } from '@angular/forms/signals';
   styleUrl: './registre.css',
 })
 export class Registre {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
   
   selectedProfile: string = 'client';
   user = {
@@ -39,11 +38,15 @@ export class Registre {
       alert('Please fill all required fields');
       return;
     }
-    const name = `${this.user.firstName} ${this.user.lastName}`;
-    await this.authService.registerClient({ name, email: this.user.email, password: this.user.password })
-      .then(() => alert('Login successful!'))
-      .catch((error: any) => alert(error.message));
-    this.user = { firstName: '', lastName: '', email: '', password: '' }; 
+    try{
+      await this.authService.registerClient({ first_name: this.user.firstName,last_name: this.user.lastName, email: this.user.email, password: this.user.password })
+      this.user = { firstName: '', lastName: '', email: '', password: '' }; 
+      await this.router.navigate(['/client']);
+    }catch(error: any)
+    {
+      alert(error.message);
+    }
+
   }
 
   async submitShop() {
@@ -54,6 +57,8 @@ export class Registre {
     try {
       await this.authService.registerShop(this.shop);
       alert('Login successful!');
+      await this.router.navigate(['/boutiques']);
+
     } catch (error: any) {
       alert(error.message);
     }

@@ -28,11 +28,11 @@ export class AuthService {
     }
   }
 
-  async registerClient(clientData: { name: string; email: string; password: string; }): Promise<void> {
+  async registerClient(clientData: { first_name: string; last_name: string;email: string; password: string; }): Promise<void> {
     try {
       const response = await firstValueFrom(
         this.http.post<{ token?: string; user?: User}>(
-          `${environment.api}/auth/register`, 
+          `${environment.api}/client/create`,
           clientData
         )
       ); 
@@ -54,7 +54,7 @@ export class AuthService {
       if (role === 'client') {
         response = await firstValueFrom(
           this.http.post<{ token?: string; user?: User }>(
-            `${environment.api}/auth/login`,
+            `${environment.api}/client/login`,
             { email, password }
           )
         );
