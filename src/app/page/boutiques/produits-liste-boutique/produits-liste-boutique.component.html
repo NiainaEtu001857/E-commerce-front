@@ -50,6 +50,7 @@
                     <th>Reference</th>
                     <th>Type</th>
                     <th>Description</th>
+                    <th>Prix vente</th>
                     <th>Quantite min</th>
                     <th>Unite</th>
                     <th>Attributs</th>
@@ -77,6 +78,7 @@
                     <td>{{ service.ref || '-' }}</td>
                     <td>{{ service.type || '-' }}</td>
                     <td>{{ service.detail|| '-' }}</td>
+                    <td>{{ service.sale_price ?? 0 | number:'1.0-2':'fr-FR' }} Ar</td>
                     <td>{{ service.min_quantity ?? '-' }}</td>
                     <td>{{ service.base_unity || '-' }}</td>
                     <td>{{ formatAttributes(service.attributes) }}</td>

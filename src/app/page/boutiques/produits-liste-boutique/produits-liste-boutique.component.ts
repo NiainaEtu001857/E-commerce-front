@@ -15,6 +15,7 @@ type ServiceItem = {
   ref?: string;
   type?: string;
   detail?: string;
+  sale_price?: number;
   min_quantity?: number;
   base_unity?: string;
   attributes?: ServiceAttribute[];

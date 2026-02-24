@@ -17,9 +17,7 @@ export class AjouterStockComponent implements OnInit {
 
   stockForm = {
     service: '',
-    quantity: 0,
-    sale_price: 0,
-    purchase_price: 0,
+    quantity: 0
   };
 
   constructor(private http: HttpClient) {}
@@ -59,12 +57,8 @@ export class AjouterStockComponent implements OnInit {
       return;
     }
 
-    if (
-      Number(this.stockForm.quantity) < 0 ||
-      Number(this.stockForm.sale_price) < 0 ||
-      Number(this.stockForm.purchase_price) < 0
-    ) {
-      alert('Les valeurs du stock doivent être positives.');
+    if (Number(this.stockForm.quantity) < 0) {
+      alert('La quantité du stock doit être positive.');
       return;
     }
 
@@ -80,9 +74,7 @@ export class AjouterStockComponent implements OnInit {
           `${environment.api}/shop/stock/add`,
           {
             service: this.stockForm.service,
-            quantity: Number(this.stockForm.quantity),
-            sale_price: Number(this.stockForm.sale_price),
-            purchase_price: Number(this.stockForm.purchase_price),
+            quantity: Number(this.stockForm.quantity)
           },
           {
             headers: new HttpHeaders({
@@ -96,9 +88,7 @@ export class AjouterStockComponent implements OnInit {
       alert('Stock ajouté avec succès.');
       this.stockForm = {
         service: '',
-        quantity: 0,
-        sale_price: 0,
-        purchase_price: 0,
+        quantity: 0
       };
     } catch (error: any) {
       alert(error?.error?.message || error?.error?.error || 'Erreur serveur');

@@ -21,6 +21,7 @@ export class AjouterComponent {
     name: '',
     category: '',
     min_quantity: null as number | null,
+    sale_price: null as number | null,
     description: '',
     image: null as File | null,
     base_unity: '',
@@ -73,6 +74,12 @@ export class AjouterComponent {
       return;
     }
 
+    const salePrice = Number(this.productForm.sale_price ?? -1);
+    if (!Number.isFinite(salePrice) || salePrice < 0) {
+      alert('Le prix de vente doit être un nombre positif.');
+      return;
+    }
+
     if (this.hasInvalidAttribute) {
       alert('Chaque attribut doit avoir une clé et une valeur.');
       return;
@@ -89,6 +96,7 @@ export class AjouterComponent {
       name: this.productForm.name.trim(),
       type: this.productForm.category,
       min_quantity: this.productForm.min_quantity,
+      sale_price: salePrice,
       base_unity: this.productForm.base_unity || 'Unité',
       detail: this.productForm.description?.trim() || null,
       image_name: this.productForm.image?.name || null,
@@ -114,6 +122,7 @@ export class AjouterComponent {
         name: '',
         category: '',
         min_quantity: null,
+        sale_price: null,
         description: '',
         image: null,
         base_unity: 'piece',

@@ -17,7 +17,7 @@ export class CommandesAjoutComponent implements OnInit {
     clientId: '',
   };
 
-  newItem: any = { serviceId: '', quantity: 1, unitPrice: 0 };
+  newItem: any = { serviceId: '', quantity: 1 };
 
   clients: any[] = [];
   services: any[] = [];
@@ -44,18 +44,26 @@ export class CommandesAjoutComponent implements OnInit {
   }
 
   addItem(): void {
-    if (!this.newItem.serviceId || this.newItem.quantity <= 0 || this.newItem.unitPrice <= 0) return;
+    if (!this.newItem.serviceId || this.newItem.quantity <= 0) return;
     const service = this.services.find((s: any) => s._id === this.newItem.serviceId);
+    if (!service) return;
+    const unitPrice = Number(service.sale_price || 0);
     this.order.items.push({
       serviceId: this.newItem.serviceId,
       serviceName: service.name,
       quantity: this.newItem.quantity,
-      unitPrice: this.newItem.unitPrice,
-      totalPrice: this.newItem.quantity * this.newItem.unitPrice
+      unitPrice,
+      totalPrice: this.newItem.quantity * unitPrice
     });
 
     this.calculateTotal();
-    this.newItem = { serviceId: '', quantity: 1, unitPrice: 0 };
+    this.newItem = { serviceId: '', quantity: 1 };
+  }
+
+  get selectedServicePrice(): number {
+    if (!this.newItem.serviceId) return 0;
+    const service = this.services.find((s: any) => s._id === this.newItem.serviceId);
+    return Number(service?.sale_price || 0);
   }
 
   removeItem(index: number): void {

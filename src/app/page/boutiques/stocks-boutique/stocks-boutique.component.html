@@ -1,8 +1,6 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-12">
-
-      <!-- Header -->
       <div class="header">
         <div class="header-body">
           <div class="row align-items-center">
@@ -20,13 +18,9 @@
         </div>
       </div>
 
-      <!-- Card -->
       <div class="card">
-
-        <!-- Card header -->
         <div class="card-header">
           <div class="row align-items-center">
-
             <div class="col">
               <input
                 type="search"
@@ -47,21 +41,17 @@
                 <option *ngFor="let type of typeOptions" [value]="type">{{ type }}</option>
               </select>
             </div>
-
           </div>
         </div>
 
-        <!-- Table -->
         <div class="table-responsive">
           <table class="table table-hover table-nowrap card-table">
             <thead>
               <tr>
-                <th>Référence</th>
+                <th>Reference</th>
                 <th>Service</th>
                 <th>Type</th>
-                <th>Prix de vente</th>
-                <th>Prix d'achat</th>
-                <th>Quantité</th>
+                <th>Quantite</th>
                 <th>Statut</th>
                 <th>Date</th>
               </tr>
@@ -69,23 +59,21 @@
 
             <tbody>
               <tr *ngIf="isLoading">
-                <td colspan="9" class="text-center py-4">Chargement des stocks...</td>
+                <td colspan="6" class="text-center py-4">Chargement des stocks...</td>
               </tr>
 
               <tr *ngIf="!isLoading && errorMessage">
-                <td colspan="9" class="text-center text-danger py-4">{{ errorMessage }}</td>
+                <td colspan="6" class="text-center text-danger py-4">{{ errorMessage }}</td>
               </tr>
 
               <tr *ngIf="!isLoading && !errorMessage && filteredStocks.length === 0">
-                <td colspan="9" class="text-center py-4">Aucun stock trouvé.</td>
+                <td colspan="6" class="text-center py-4">Aucun stock trouve.</td>
               </tr>
 
               <tr *ngFor="let p of filteredStocks">
                 <td>{{ p.service?.ref || '-' }}</td>
                 <td>{{ p.service?.name || '-' }}</td>
                 <td>{{ p.service?.type || '-' }}</td>
-                <td>{{ p.sale_price | number:'1.0-0':'es-AR' }} AR</td>
-                <td>{{ p.purchase_price | number:'1.0-0':'es-AR' }} AR</td>
                 <td>{{ p.quantity }}</td>
                 <td>
                   <span
@@ -98,12 +86,11 @@
                     {{ getStatusLabel(p.quantity) }}
                   </span>
                 </td>
-                  <td>{{ p.date | date:'EEEE d MMMM y, HH:mm':'':'fr-FR' }}</td>
+                <td>{{ p.date | date:'EEEE d MMMM y, HH:mm':'':'fr-FR' }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   </div>
