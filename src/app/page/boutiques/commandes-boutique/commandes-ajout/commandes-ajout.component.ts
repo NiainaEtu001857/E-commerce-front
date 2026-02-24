@@ -3,9 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { OrderService } from '../../../../services/order';
 
-@Component({
-  selector: 'app-commandes-ajout',
-  imports: [CommonModule, FormsModule],
+@Component({ selector: 'app-commandes-ajout', imports: [CommonModule, FormsModule],
   templateUrl: './commandes-ajout.component.html',
   styleUrls: ['./commandes-ajout.component.css']
 })

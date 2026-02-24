@@ -32,6 +32,10 @@ export class ProduitsListeBoutiqueComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   searchTerm = '';
+  page = 1;
+  limit = 10;
+  totalPages = 0;
+  totalItems = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -50,16 +54,31 @@ export class ProduitsListeBoutiqueComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      this.services = await firstValueFrom(
-        this.http.get<ServiceItem[]>(`${environment.api}/shop/service/services`, {
+      const response: any = await firstValueFrom(
+        this.http.get<any>(`${environment.api}/shop/service/services`, {
           headers: new HttpHeaders({
             Authorization: `Bearer ${token}`,
           }),
+          params: {
+            page: this.page,
+            limit: this.limit
+          }
         })
       );
+      if (Array.isArray(response)) {
+        this.services = response;
+        this.totalItems = this.services.length;
+        this.totalPages = 1;
+      } else {
+        this.services = Array.isArray(response?.data) ? response.data : [];
+        this.totalItems = Number(response?.totalItems) || this.services.length;
+        this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
+      }
     } catch (error: any) {
       this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement services';
       this.services = [];
+      this.totalPages = 0;
+      this.totalItems = 0;
     } finally {
       this.isLoading = false;
     }
@@ -84,6 +103,20 @@ export class ProduitsListeBoutiqueComponent implements OnInit {
 
   onSearch(value: string) {
     this.searchTerm = value;
+  }
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page -= 1;
+      this.loadServices();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page += 1;
+      this.loadServices();
+    }
   }
 
   trackByService(index: number, service: ServiceItem): string | number {

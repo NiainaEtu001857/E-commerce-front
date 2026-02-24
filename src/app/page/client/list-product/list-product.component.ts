@@ -60,13 +60,16 @@ export class ListProductComponent implements OnInit {
       const response: any = await firstValueFrom(
         this.http.get(`${environment.api}/client/shop/${id}/services`, {
           headers,
-          params: { page: this.page, limit: this.limit, shopId: id },
+          params: { page: this.page, limit: this.limit },
         })
       );
 
       this.services = this.extractServices(response);
       this.shop = response?.shop ? { ...response.shop } : null;
-      this.totalPages = Number(response?.totalPages) || 1;
+      this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
+      if (this.page > this.totalPages) {
+        this.page = this.totalPages;
+      }
 
       this.cdr.markForCheck();
     } catch (error) {
@@ -85,6 +88,10 @@ export class ListProductComponent implements OnInit {
 
     if (Array.isArray(response?.services)) {
       return response.services;
+    }
+
+    if (Array.isArray(response?.data)) {
+      return response.data;
     }
 
     if (response?.service && typeof response.service === 'object') {

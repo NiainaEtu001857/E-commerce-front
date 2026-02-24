@@ -81,7 +81,7 @@
             </thead>
 
             <tbody>
-              <tr *ngFor="let order of orders">
+              <tr *ngFor="let order of pagedOrders">
 
                 <td class="fw-semibold">
                   {{ order.id }}
@@ -201,14 +201,14 @@
 
           <nav>
             <ul class="pagination mb-0">
-              <li class="page-item disabled">
-                <a class="page-link">Précédent</a>
+              <li class="page-item" [class.disabled]="page <= 1">
+                <button type="button" class="page-link" (click)="previousPage()" [disabled]="page <= 1">Précédent</button>
               </li>
-              <li class="page-item active">
-                <a class="page-link">1</a>
+              <li class="page-item active" *ngIf="totalPages > 0">
+                <span class="page-link">{{ page }} / {{ totalPages }}</span>
               </li>
-              <li class="page-item">
-                <a class="page-link">Suivant</a>
+              <li class="page-item" [class.disabled]="page >= totalPages">
+                <button type="button" class="page-link" (click)="nextPage()" [disabled]="page >= totalPages">Suivant</button>
               </li>
             </ul>
           </nav>

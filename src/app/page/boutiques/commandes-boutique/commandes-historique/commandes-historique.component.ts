@@ -43,6 +43,10 @@ export class CommandesHistoriqueComponent implements OnInit {
   shopId: string = '';
   isLoading = false;
   errorMessage = '';
+  page = 1;
+  limit = 10;
+  totalPages = 0;
+  totalItems = 0;
 
   constructor(private orderService: OrderService) {}
 
@@ -69,20 +73,31 @@ export class CommandesHistoriqueComponent implements OnInit {
     this.errorMessage = '';
 
     forkJoin({
-      orders: this.orderService.getShopOrders(this.shopId),
+      orders: this.orderService.getShopOrders(this.shopId, this.page, this.limit),
       clients: this.orderService.getClients()
     }).subscribe({
       next: ({ orders, clients }) => {
-        this.clientsById = (clients || []).reduce((acc: Record<string, Client>, client: Client) => {
+        const clientsList = Array.isArray(clients?.data) ? clients.data : clients || [];
+        this.clientsById = clientsList.reduce((acc: Record<string, Client>, client: Client) => {
           acc[client._id] = client;
           return acc;
         }, {});
-        this.orders = orders || [];
+        if (Array.isArray(orders?.data)) {
+          this.orders = orders.data;
+          this.totalItems = Number(orders?.totalItems) || this.orders.length;
+          this.totalPages = Math.max(Number(orders?.totalPages) || 1, 1);
+        } else {
+          this.orders = Array.isArray(orders) ? orders : [];
+          this.totalItems = this.orders.length;
+          this.totalPages = 1;
+        }
         this.applyFilters();
         this.isLoading = false;
       },
       error: () => {
         this.errorMessage = 'Erreur lors du chargement de l\'historique.';
+        this.totalItems = 0;
+        this.totalPages = 0;
         this.isLoading = false;
       }
     });
@@ -113,6 +128,20 @@ export class CommandesHistoriqueComponent implements OnInit {
 
   viewOrder(order: Order) {
     console.log('Commande :', order);
+  }
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page -= 1;
+      this.loadData();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page += 1;
+      this.loadData();
+    }
   }
 
   getStatusLabel(status: string): string {

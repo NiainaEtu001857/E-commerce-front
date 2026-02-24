@@ -51,10 +51,21 @@ export class ChooseShopComponent implements OnInit {
         })
       );
 
-      this.shops = Array.isArray(response) ? response : [];
-      this.totalPages = 1;
+      this.shops = Array.isArray(response?.data)
+        ? response.data
+        : Array.isArray(response)
+          ? response
+          : [];
+      this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
+      const maxPage = this.totalPages;
+      if (this.page > maxPage) {
+        this.page = maxPage;
+      }
       this.cdr.markForCheck();
     } catch (error) {
+      this.shops = [];
+      this.totalPages = 0;
+      this.cdr.markForCheck();
       console.error('Erreur lors du chargement des shops', error);
     }
   }

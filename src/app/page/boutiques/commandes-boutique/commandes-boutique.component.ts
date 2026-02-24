@@ -23,13 +23,13 @@ interface Order {
 
 @Component({
   selector: 'app-commandes-boutique',
-  standalone: true, // obligatoire si tu importes FormsModule/ CommonModule ici
+  standalone: true, 
   imports: [
     FormsModule,
     CommonModule
   ],
   templateUrl: './commandes-boutique.component.html',
-  styleUrls: ['./commandes-boutique.component.css'], // CORRIGÉ ici
+  styleUrls: ['./commandes-boutique.component.css'], 
 })
 export class CommandesBoutiqueComponent implements OnInit {
   
@@ -39,6 +39,10 @@ export class CommandesBoutiqueComponent implements OnInit {
 
   orders: Order[] = [];
   allOrders: Order[] = [];
+  pagedOrders: Order[] = [];
+  page = 1;
+  limit = 10;
+  totalPages = 0;
 
   constructor() {}
 
@@ -46,7 +50,6 @@ export class CommandesBoutiqueComponent implements OnInit {
     this.loadOrders();
   }
 
-  // Charger les commandes (mock ou API)
   loadOrders(): void {
     this.allOrders = [
       {
@@ -87,7 +90,6 @@ export class CommandesBoutiqueComponent implements OnInit {
     this.applyFilters();
   }
 
-  // 🔎 Appliquer filtres
   applyFilters(): void {
     this.orders = this.allOrders.filter(order => {
       const matchSearch =
@@ -103,34 +105,60 @@ export class CommandesBoutiqueComponent implements OnInit {
 
       return matchSearch && matchStatus;
     });
+
+    this.page = 1;
+    this.updatePagination();
   }
 
-  // Réinitialiser filtres
   clearFilters(): void {
     this.searchText = '';
     this.statusFilter = '';
     this.applyFilters();
   }
 
-  // Rafraîchir
   refresh(): void {
     this.loadOrders();
   }
 
-  // 👁️ Voir commande
   viewOrder(order: Order): void {
     this.selectedOrder = order;
   }
 
-  // ✏️ Modifier commande
   editOrder(order: Order): void {
     console.log('Modifier commande :', order);
-    // Exemple :
-    // this.router.navigate(['/boutique/commandes/edit', order.id]);
   }
 
   closeOrderDetails(): void {
     this.selectedOrder = null;
+  }
+
+  updatePagination(): void {
+    this.totalPages = this.orders.length > 0 ? Math.ceil(this.orders.length / this.limit) : 0;
+    if (this.totalPages > 0 && this.page > this.totalPages) {
+      this.page = this.totalPages;
+    }
+    if (this.totalPages === 0) {
+      this.page = 1;
+      this.pagedOrders = [];
+      return;
+    }
+    const start = (this.page - 1) * this.limit;
+    const end = start + this.limit;
+    this.pagedOrders = this.orders.slice(start, end);
+  }
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page -= 1;
+      this.updatePagination();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page += 1;
+      this.updatePagination();
+    }
   }
 
 }

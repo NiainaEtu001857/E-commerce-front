@@ -41,7 +41,6 @@ export class ClientLayoutComponent {
   }
 
   checkout() {
-    // Ici, envoyer le panier au backend
     console.log('Panier envoyé:', this.cart);
   }
 }

@@ -89,16 +89,16 @@
 
             <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
               <div class="small text-muted">
-                Affichage {{ filteredServices.length > 0 ? 1 : 0 }}-{{ filteredServices.length }} sur {{ filteredServices.length }}
+                Affichage {{ filteredServices.length }} sur {{ totalItems || filteredServices.length }}
               </div>
               <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-outline-secondary" disabled>
+                <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">
                   Prev
                 </button>
                 <button type="button" class="btn btn-outline-secondary" disabled>
-                  Page 1 / 1
+                  Page {{ page }} / {{ totalPages || 1 }}
                 </button>
-                <button type="button" class="btn btn-outline-secondary" disabled>
+                <button type="button" class="btn btn-outline-secondary" (click)="nextPage()" [disabled]="page >= totalPages || isLoading || totalPages <= 1">
                   Next
                 </button>
               </div>

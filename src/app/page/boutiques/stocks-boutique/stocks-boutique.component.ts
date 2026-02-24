@@ -20,6 +20,10 @@ export class StocksBoutiqueComponent implements OnInit {
 
   filteredStocks: any[] = [];
   typeOptions: string[] = [];
+  page = 1;
+  limit = 10;
+  totalPages = 0;
+  totalItems = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -40,10 +44,22 @@ export class StocksBoutiqueComponent implements OnInit {
     this.http
       .get<any[]>(`${environment.api}/shop/stock/list`, {
         headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+        params: {
+          page: this.page,
+          limit: this.limit
+        }
       })
       .subscribe({
-        next: (data) => {
-          this.stocks = data || [];
+        next: (response: any) => {
+          if (Array.isArray(response)) {
+            this.stocks = response || [];
+            this.totalItems = this.stocks.length;
+            this.totalPages = 1;
+          } else {
+            this.stocks = Array.isArray(response?.data) ? response.data : [];
+            this.totalItems = Number(response?.totalItems) || this.stocks.length;
+            this.totalPages = Math.max(Number(response?.totalPages) || 1, 1);
+          }
           this.typeOptions = Array.from(
             new Set(
               this.stocks
@@ -57,6 +73,8 @@ export class StocksBoutiqueComponent implements OnInit {
         },
         error: (error) => {
           this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur lors du chargement.';
+          this.totalItems = 0;
+          this.totalPages = 0;
           this.isLoading = false;
         },
       });
@@ -81,5 +99,19 @@ export class StocksBoutiqueComponent implements OnInit {
 
   getStatusLabel(quantity: number): string {
     return Number(quantity) > 0 ? 'En stock' : 'Rupture';
+  }
+
+  previousPage(): void {
+    if (this.page > 1) {
+      this.page -= 1;
+      this.loadStocks();
+    }
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page += 1;
+      this.loadStocks();
+    }
   }
 }
