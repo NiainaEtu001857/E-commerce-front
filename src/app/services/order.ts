@@ -22,4 +22,8 @@ export class OrderService {
   getServicesByShop(shopId: string): Observable<any> {
     return this.http.get(`${this.API}/shop/service/services/${shopId}`);
   }
+
+  getShopOrders(shopId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API}/orders/shop/${shopId}`);
+  }
 }
