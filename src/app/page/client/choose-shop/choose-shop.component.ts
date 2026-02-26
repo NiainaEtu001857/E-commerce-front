@@ -50,6 +50,8 @@ export class ChooseShopComponent implements OnInit {
           params: { page: this.page, limit: this.limit },
         })
       );
+      console.log(response.data);
+      
 
       this.shops = Array.isArray(response?.data)
         ? response.data

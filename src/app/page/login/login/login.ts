@@ -34,7 +34,7 @@ export class Login {
         break;
       case 'client':
         this.email = 'john@gmail.com';
-        this.password = 'john'
+        this.password = '123456';
         break
       default:
         this.email = 'admin@gmail.com';

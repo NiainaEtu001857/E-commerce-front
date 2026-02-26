@@ -29,6 +29,8 @@ export class Registre {
     password: ''
   };
 
+  photoFile!: File;
+
   selectProfile(profile: string) {
     this.selectedProfile = profile;
   }
@@ -46,17 +48,36 @@ export class Registre {
     {
       alert(error.message);
     }
-
+  }
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.photoFile = file;
+    }
   }
 
   async submitShop() {
-    if (!this.shop.name || !this.shop.email || !this.shop.type || !this.shop.description || !this.shop.password) {
+    if (!this.shop.name || !this.shop.email || !this.shop.type || !this.shop.description  || !this.shop.password) {
       alert('Please fill all required fields');
       return;
     }
     try {
-      await this.authService.registerShop(this.shop);
-      alert('Login successful!');
+      const formData = new FormData();
+      formData.append('name', this.shop.name);
+      formData.append('email', this.shop.email);
+      formData.append('type', this.shop.type);
+      formData.append('description', this.shop.description);
+      formData.append('password', this.shop.password);
+      if (this.photoFile) {
+        formData.append('photo', this.photoFile);
+      }
+      if (!this.photoFile) {
+        console.warn('Aucun fichier sélectionné !');
+      }
+      console.log([...formData]);
+      
+      await this.authService.registerShop(formData);
+      alert('Shop registered successfully!');
       await this.router.navigate(['/boutiques']);
 
     } catch (error: any) {

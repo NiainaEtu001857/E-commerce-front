@@ -6,7 +6,7 @@
       <div class="card h-100 shadow-sm">
 
         <!-- Image produit -->
-        <img src="assets/img/avatars/projects/project-1.jpg"
+        <img [src]="service.photo || 'assets/img/default-product.png'"
              class="card-img-top img-fluid"
              style="height: 180px; object-fit: cover;"
              alt="{{ service.name }}">

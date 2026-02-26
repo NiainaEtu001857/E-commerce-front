@@ -75,6 +75,7 @@ export class AuthService {
       }
 
       localStorage.setItem('token', response.token);
+      console.log(localStorage.getItem('token'));
       localStorage.setItem('user', JSON.stringify(response.user));
       this.currentUserSubject.next(response.user);
 
@@ -84,10 +85,12 @@ export class AuthService {
   }
 
 
-  async registerShop(shopData: Shop): Promise<void> {
+
+  async registerShop(shopData: FormData): Promise<void> {
     try {
+
         const response = await firstValueFrom(
-        this.http.post<{ token?: string; user?: User}>(
+        this.http.post<{ token?: string; user?: User }>(
          `${environment.api}/shop/create`, 
           shopData
         )
