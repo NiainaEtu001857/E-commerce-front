@@ -14,7 +14,7 @@ import { AuthService } from '../auth.service';
 
 export class Login {
 
-  userType: 'shop' | 'client' | 'admin' = 'client';
+  userType: 'SHOP' | 'CLIENT' | 'ADMIN' = 'CLIENT';
   email = '';
   password = '';
   constructor(
@@ -24,21 +24,21 @@ export class Login {
   ) {}
 
 
-  setUserType(type: 'shop' | 'client' | 'admin') {
+  setUserType(type: 'SHOP' | 'CLIENT' | 'ADMIN') {
     this.userType = type;
 
     switch (type) {
-      case 'shop':
+      case 'SHOP':
         this.email = 'shop@gmail.com';
         this.password = 'shop'
         break;
-      case 'client':
+      case 'CLIENT':
         this.email = 'john@gmail.com';
         this.password = '123456';
         break
       default:
         this.email = 'admin@gmail.com';
-        this.password = 'adimin';
+        this.password = 'admin';
         break;
     }
   }

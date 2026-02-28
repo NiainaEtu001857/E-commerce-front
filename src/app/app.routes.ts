@@ -4,12 +4,17 @@ import { Registre } from './page/login/registre/registre';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { BoutiqueLayoutComponent } from './layouts/boutique-layout/boutique-layout.component';
 import { ClientLayoutComponent } from './layouts/client-layout/client-layout.component';
+import { AdminLoginComponent } from './page/admin/admin-login/admin-login.component';
+import { authGuard } from './auth-guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'admin/login', component: AdminLoginComponent },
     {
         path: 'admin',
         component: AdminLayoutComponent,
+        canActivate: [authGuard],
+        data: { role: 'ADMIN' },
         children: [
             {
                 path:'',
@@ -51,7 +56,9 @@ export const routes: Routes = [
     },
     {
         path: 'boutiques',
-        component: BoutiqueLayoutComponent,
+        component: BoutiqueLayoutComponent,  
+        canActivate: [authGuard],
+        data: { role: 'SHOP' },
         children: [
             {
                 path:'',
@@ -107,7 +114,9 @@ export const routes: Routes = [
     },
     {
         path: 'client',
-        component: ClientLayoutComponent,
+        component: ClientLayoutComponent,  
+        canActivate: [authGuard],
+        data: { role: 'CLIENT' },
         children: [
             {
                 path: '',

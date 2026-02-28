@@ -36,13 +36,20 @@ export class AuthService {
           clientData
         )
       ); 
+
+      if (!response.token || !response.user) {
+        throw new Error('Réponse invalide du serveur');
+      }
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      this.currentUserSubject.next(response.user);
     } catch (error: unknown) {
       this.handleHttpError(error);
     }
   }
 
 
-  async login(email: string, password: string, role: string): Promise<void> {
+  async login(email: string, password: string, role: 'CLIENT' | 'SHOP' | 'ADMIN'): Promise<void> {
     try {
       if (!email || !password) {
         alert('Please fill all required fields');
@@ -51,17 +58,24 @@ export class AuthService {
 
       let response: { token?: string; user?: User };
 
-      if (role === 'client') {
+      if (role === 'CLIENT') {
         response = await firstValueFrom(
           this.http.post<{ token?: string; user?: User }>(
             `${environment.api}/client/login`,
             { email, password }
           )
         );
-      } else if (role === 'shop') {
+      } else if (role === 'SHOP') {
         response = await firstValueFrom(
           this.http.post<{ token?: string; user?: User }>(
             `${environment.api}/shop/login`,
+            { email, password }
+          )
+        );
+      } else if (role === 'ADMIN') {
+        response = await firstValueFrom(
+          this.http.post<{ token?: string; user?: User }>(
+            `${environment.api}/admin/login`,
             { email, password }
           )
         );
