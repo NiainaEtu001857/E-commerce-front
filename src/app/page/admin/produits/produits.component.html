@@ -16,25 +16,27 @@
         <div class="tab-pane fade show active" id="contactsListPane" role="tabpanel" aria-labelledby="contactsListTab">
           <div class="card" data-list='{"valueNames": ["item-shop", "item-ref", "item-name", "item-detail", "item-price", "item-min", "item-base", "item-attrs", "item-type"], "page": 10, "pagination": {"paginationClass": "list-pagination"}}' id="contactsList">
             <div class="card-header">
-              <div class="row align-items-center">
-                <div class="col">
-                  <form>
-                    <div class="input-group input-group-flush input-group-merge input-group-reverse">
-                      <input class="form-control list-search" type="search" placeholder="Search">
-                      <span class="input-group-text">
-                        <i class="fe fe-search"></i>
-                      </span>
-                    </div>
-                  </form>
+              <div class="row align-items-center g-2">
+                <div class="col-md">
+                  <div class="input-group input-group-flush input-group-merge input-group-reverse">
+                    <input
+                      class="form-control list-search"
+                      type="search"
+                      placeholder="Rechercher (boutique, ref, nom, type, description)"
+                      [value]="searchTerm"
+                      (input)="onSearch($any($event.target).value)"
+                    >
+                    <span class="input-group-text">
+                      <i class="fe fe-search"></i>
+                    </span>
+                  </div>
                 </div>
-                <div class="col-auto me-n3">
-                  <form>
-                    <select class="form-select form-select-sm form-control-flush" data-choices='{"searchEnabled": false}'>
-                      <option>5 per page</option>
-                      <option selected>10 per page</option>
-                      <option>All</option>
-                    </select>
-                  </form>
+                <div class="col-auto">
+                  <select class="form-select form-select-sm" disabled>
+                    <option>10 / page</option>
+                    <option>20 / page</option>
+                    <option>50 / page</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -70,11 +72,11 @@
                     <td colspan="11" class="text-center py-4 text-danger">{{ errorMessage }}</td>
                   </tr>
 
-                  <tr *ngIf="!isLoading && !errorMessage && services.length === 0">
+                  <tr *ngIf="!isLoading && !errorMessage && filteredServices.length === 0">
                     <td colspan="11" class="text-center py-4">Aucun produit trouvé.</td>
                   </tr>
 
-                  <tr *ngFor="let service of services">
+                  <tr *ngFor="let service of filteredServices; trackBy: trackByService">
                     <td>
                       <div class="form-check">
                         <input class="form-check-input list-checkbox" [id]="'service-' + service._id" type="checkbox">
@@ -105,6 +107,22 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+            <div class="card-footer d-flex flex-wrap justify-content-between align-items-center gap-2">
+              <div class="small text-muted">
+                Affichage {{ filteredServices.length }} sur {{ totalItems || filteredServices.length }}
+              </div>
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-outline-secondary" (click)="previousPage()" [disabled]="page <= 1 || isLoading">
+                  Prev
+                </button>
+                <button type="button" class="btn btn-outline-secondary" disabled>
+                  Page {{ page }} / {{ totalPages || 1 }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="nextPage()" [disabled]="page >= totalPages || isLoading || totalPages <= 1">
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
