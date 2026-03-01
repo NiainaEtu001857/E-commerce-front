@@ -3,13 +3,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TauxRevenuComponent } from "./taux-revenu/taux-revenu.component";
 import { CommonModule } from '@angular/common';
 import { TauxRevenuMensuelComponent } from "./taux-revenu-mensuel/taux-revenu-mensuel.component";
-import { first, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+
+type TopSellingProduct = {
+  product: string;
+  price: number;
+  quantitySold: number;
+  shop: string;
+  clientCount: number;
+}
 
 type Stats = {
   nbrClient?: number;
   nbrService?: number;
   nbrShop?: number;
+  topSellingProducts?: TopSellingProduct[];
 }
 
 @Component({
@@ -54,6 +63,7 @@ export class DashboardComponent {
     } catch (error: any){
       this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur chargement ';
       this.stats = {};
+      this.isLoading = false;
     }
   }
   
