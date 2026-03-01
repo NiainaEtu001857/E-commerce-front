@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 
 type Client = {
   id?: number | string;
+  _id?: string;
   first_name?: string;
   last_name?: string;
   email?: string;
@@ -27,6 +28,7 @@ export class ClientComponent implements OnInit {
   limit = 10;
   totalPages = 0;
   totalItems = 0;
+  deletingClientId: string | null = null;
 
   constructor(private http: HttpClient) {}
 
@@ -107,6 +109,49 @@ export class ClientComponent implements OnInit {
   }
 
   trackByClient(index: number, client: Client): string | number {
-    return client.id || client.email || index;
+    return client._id || client.id || client.email || index;
+  }
+
+  async deleteClient(client: Client): Promise<void> {
+    const clientId = client._id || (typeof client.id === 'string' ? client.id : '');
+    if (!clientId) {
+      this.errorMessage = 'ID client manquant.';
+      return;
+    }
+
+    const fullName = `${client.first_name || ''} ${client.last_name || ''}`.trim() || client.email || 'ce client';
+    const confirmed = window.confirm(`Supprimer ${fullName} ?`);
+    if (!confirmed) {
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.errorMessage = 'Vous devez vous connecter.';
+      return;
+    }
+
+    this.deletingClientId = clientId;
+    this.errorMessage = '';
+
+    try {
+      await firstValueFrom(
+        this.http.delete(`${environment.api}/admin/clients/${clientId}`, {
+          headers: new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+          }),
+        })
+      );
+
+      if (this.clients.length === 1 && this.page > 1) {
+        this.page -= 1;
+      }
+
+      await this.loadClients();
+    } catch (error: any) {
+      this.errorMessage = error?.error?.message || error?.error?.error || 'Erreur suppression client';
+    } finally {
+      this.deletingClientId = null;
+    }
   }
 }

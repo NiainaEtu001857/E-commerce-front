@@ -94,36 +94,47 @@
                           <th>
                             <a class="list-sort text-body-secondary" data-sort="item-email" href="#">Email</a>
                           </th>
+                          <th class="text-end">Actions</th>
                         </tr>
                       </thead>
                       <tbody class="list fs-base">
                         <tr *ngIf="isLoading">
-                          <td colspan="4" class="text-center py-4">Chargement des clients...</td>
+                          <td colspan="5" class="text-center py-4">Chargement des clients...</td>
                         </tr>
 
                         <tr *ngIf="!isLoading && errorMessage">
-                          <td colspan="4" class="text-center py-4 text-danger">{{ errorMessage }}</td>
+                          <td colspan="5" class="text-center py-4 text-danger">{{ errorMessage }}</td>
                         </tr>
 
                         <tr *ngIf="!isLoading && !errorMessage && filteredClients.length === 0">
-                          <td colspan="4" class="text-center py-4">Aucun client trouvé.</td>
+                          <td colspan="5" class="text-center py-4">Aucun client trouvé.</td>
                         </tr>
 
                         <tr *ngFor="let client of filteredClients; trackBy: trackByClient">
                           <td>
                             <div class="form-check">
-                              <input class="form-check-input list-checkbox" [id]="'client-' + client.id" type="checkbox">
-                              <label class="form-check-label" [for]="'client-' + client.id"></label>
+                              <input class="form-check-input list-checkbox" [id]="'client-' + (client._id || client.id)" type="checkbox">
+                              <label class="form-check-label" [for]="'client-' + (client._id || client.id)"></label>
                             </div>
                           </td>
                           <td>
-                            <span class="item-id text-muted">{{ client.id }}</span>
+                            <span class="item-id text-muted">{{ client._id || client.id }}</span>
                           </td>
                           <td>
                             <span class="item-name text-reset">{{ client.first_name }} {{ client.last_name }}</span>
                           </td>
                           <td>
                             <a class="item-email text-reset" [href]="'mailto:' + client.email">{{ client.email }}</a>
+                          </td>
+                          <td class="text-end">
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-outline-danger"
+                              (click)="deleteClient(client)"
+                              [disabled]="isLoading || deletingClientId === (client._id || client.id)"
+                            >
+                              {{ deletingClientId === (client._id || client.id) ? 'Suppression...' : 'Supprimer' }}
+                            </button>
                           </td>
                         </tr>
                       </tbody>
