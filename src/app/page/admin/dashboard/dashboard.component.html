@@ -25,89 +25,81 @@
       </div> <!-- / .header -->
 
       <!-- CARDS -->
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-12 col-lg-6 col-xl">
 
-            <!-- Value  -->
+
+
+
+      <div class="container-fluid">
+        <div *ngIf="isLoading" class="alert alert-info" role="status">
+          Loading...
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+
+        <div class="row" *ngIf="!isLoading && !errorMessage">
+          <!-- Start card -->
+          <div class="col-12 col-lg-6 col-xl">
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Revenues
+                      Number of clients
                     </h6>
-
-                    <!-- Heading -->
                     <span class="h2 mb-0">
-                      $24,500
+                      {{ stats.nbrClient || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
-
-                    <!-- Icon -->
                     <span class="h2 fe fe-dollar-sign text-body-secondary mb-0"></span>
-
                   </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
           <div class="col-12 col-lg-6 col-xl">
-
-            <!-- Hours -->
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Total Boutique
+                      Number of products
                     </h6>
                     <span class="h2 mb-0">
-                      $24,500
+                      {{ stats.nbrService || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
                     <span class="h2 fe fe-box text-body-secondary mb-0"></span>
-
                   </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
           <div class="col-12 col-lg-6 col-xl">
-
-            <!-- Exit -->
             <div class="card">
               <div class="card-body">
                 <div class="row align-items-center gx-0">
                   <div class="col">
-
-                    <!-- Title -->
                     <h6 class="text-uppercase text-body-secondary mb-2">
-                      Total Clients
+                      Number of shops
                     </h6>
-
-                    <!-- Heading -->
                     <span class="h2 mb-0">
-                      1000
+                      {{ stats.nbrShop || 0 }}
                     </span>
                   </div>
                   <div class="col-auto">
-                        <span class="h2 fe fe-users text-body-secondary mb-0"></span>
-                    </div>
+                    <span class="h2 fe fe-users text-body-secondary mb-0"></span>
+                  </div>
                 </div> <!-- / .row -->
               </div>
             </div>
-
           </div>
+          <!-- End card -->
         </div> <!-- / .row -->
+
         <div class="row">
           <div class="col-12 col-xl-6">
           <app-taux-revenu></app-taux-revenu>
