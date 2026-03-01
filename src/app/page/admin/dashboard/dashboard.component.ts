@@ -19,6 +19,9 @@ type Stats = {
   nbrService?: number;
   nbrShop?: number;
   topSellingProducts?: TopSellingProduct[];
+  chartLabels?: string[];
+  monthlyRevenue?: number[];
+  monthlyNewClients?: number[];
 }
 
 @Component({

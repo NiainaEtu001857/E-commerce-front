@@ -53,7 +53,7 @@
                     </span>
                   </div>
                   <div class="col-auto">
-                    <span class="h2 fe fe-dollar-sign text-body-secondary mb-0"></span>
+                    <span class="h2 fe fe-user text-body-secondary mb-0"></span>
                   </div>
                 </div> <!-- / .row -->
               </div>
@@ -91,7 +91,7 @@
                     </span>
                   </div>
                   <div class="col-auto">
-                    <span class="h2 fe fe-users text-body-secondary mb-0"></span>
+                    <span class="h2 fe fe-shopping-bag text-body-secondary mb-0"></span>
                   </div>
                 </div> <!-- / .row -->
               </div>
@@ -102,10 +102,16 @@
 
         <div class="row">
           <div class="col-12 col-xl-6">
-          <app-taux-revenu></app-taux-revenu>
+          <app-taux-revenu
+            [chartLabels]="stats.chartLabels"
+            [monthlyRevenue]="stats.monthlyRevenue"
+          ></app-taux-revenu>
           </div>
           <div class="col-12 col-xl-6">
-            <app-taux-revenu-mensuel></app-taux-revenu-mensuel>
+            <app-taux-revenu-mensuel
+              [chartLabels]="stats.chartLabels"
+              [monthlyNewClients]="stats.monthlyNewClients"
+            ></app-taux-revenu-mensuel>
           </div>
         </div> <!-- / .row -->
         <div class="row">
