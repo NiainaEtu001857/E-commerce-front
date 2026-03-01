@@ -38,30 +38,6 @@
 
                   </div>
                 </div> <!-- / .row -->
-                <div class="row align-items-center">
-                  <div class="col">
-
-                    <!-- Nav -->
-                    <ul class="nav nav-tabs nav-overflow header-tabs">
-                      <li class="nav-item">
-                        <a href="#!" class="nav-link text-nowrap active">
-                          All contacts <span class="badge rounded-pill text-bg-secondary-subtle">823</span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#!" class="nav-link text-nowrap">
-                          Your contacts <span class="badge rounded-pill text-bg-secondary-subtle">231</span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#!" class="nav-link text-nowrap">
-                          Deleted <span class="badge rounded-pill text-bg-secondary-subtle">22</span>
-                        </a>
-                      </li>
-                    </ul>
-
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -114,279 +90,44 @@
 
                           </th>
                           <th>
+                            <a class="list-sort text-body-secondary" data-sort="item-id" href="#">ID</a>
+                          </th>
+                          <th>
                             <a class="list-sort text-body-secondary" data-sort="item-name" href="#">Nom</a>
                           </th>
                           <th>
                             <a class="list-sort text-body-secondary" data-sort="item-email" href="#">Email</a>
                           </th>
-                          <th>
-                            <a class="list-sort text-body-secondary" data-sort="item-phone" href="#">Phone</a>
-                          </th>
-                          <th>
-                            <a class="list-sort text-body-secondary" data-sort="item-achat" href="#">Nombres d' achat</a>
-                          </th>
-                          <th colspan="2">
-                            <a class="list-sort text-body-secondary" data-sort="item-status" href="#">Status</a>
-                          </th>
                         </tr>
                       </thead>
                       <tbody class="list fs-base">
-                        <tr>
-                          <td>
-
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                              <input class="form-check-input list-checkbox" id="listCheckboxOne" type="checkbox">
-                              <label class="form-check-label" for="listCheckboxOne"></label>
-                            </div>
-
-                          </td>
-                          <td>
-
-                            <!-- Avatar -->
-                            <div class="avatar avatar-xs align-middle me-2">
-                              <img class="avatar-img rounded-circle" src="assets/img/avatars/profiles/avatar-1.jpg" alt="...">
-                            </div> <a class="item-name text-reset" href="profile-posts.html">Dianna Smiley</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Email -->
-                            <a class="item-email text-reset" href="mailto:john.doe@company.com">diana.smiley@company.com</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Phone -->
-                            <a class="item-phone text-reset" href="tel:1-123-456-4890">(988) 568-3568</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Badge -->
-                            <span class="item-score badge text-bg-danger-subtle">1/10</span>
-
-                          </td>
-                          <td>
-
-                            <!-- Link -->
-                            <a class="item-company text-reset" href="team-overview.html">Twitter</a>
-
-                          </td>
-                          <td class="text-end">
-
-                            <!-- Dropdown -->
-                            <div class="dropdown">
-                              <a class="dropdown-ellipses dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fe fe-more-vertical"></i>
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#!" class="dropdown-item">
-                                  Action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Another action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Something else here
-                                </a>
-                              </div>
-                            </div>
-
-                          </td>
+                        <tr *ngIf="isLoading">
+                          <td colspan="4" class="text-center py-4">Chargement des clients...</td>
                         </tr>
-                        <tr>
-                          <td>
 
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                              <input class="form-check-input list-checkbox" id="listCheckboxTwo" type="checkbox">
-                              <label class="form-check-label" for="listCheckboxTwo"></label>
-                            </div>
-
-                          </td>
-                          <td>
-
-                            <!-- Avatar -->
-                            <div class="avatar avatar-xs align-middle me-2">
-                              <img class="avatar-img rounded-circle" src="assets/img/avatars/profiles/avatar-2.jpg" alt="...">
-                            </div> <a class="item-name text-reset" href="profile-posts.html">Ab Hadley</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Email -->
-                            <a class="item-email text-reset" href="mailto:john.doe@company.com">ab.hadley@company.com</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Phone -->
-                            <a class="item-phone text-reset" href="tel:1-123-456-7890">(650) 430-9876</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Badge -->
-                            <span class="item-score badge text-bg-success-subtle">8/10</span>
-
-                          </td>
-                          <td>
-
-                            <!-- Link -->
-                            <a class="item-company text-reset" href="team-overview.html">Google</a>
-
-                          </td>
-                          <td class="text-end">
-
-                            <!-- Dropdown -->
-                            <div class="dropdown">
-                              <a class="dropdown-ellipses dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fe fe-more-vertical"></i>
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#!" class="dropdown-item">
-                                  Action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Another action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Something else here
-                                </a>
-                              </div>
-                            </div>
-
-                          </td>
+                        <tr *ngIf="!isLoading && errorMessage">
+                          <td colspan="4" class="text-center py-4 text-danger">{{ errorMessage }}</td>
                         </tr>
-                        <tr>
-                          <td>
 
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                              <input class="form-check-input list-checkbox" id="listCheckboxThree" type="checkbox">
-                              <label class="form-check-label" for="listCheckboxThree"></label>
-                            </div>
-
-                          </td>
-                          <td>
-
-                            <!-- Avatar -->
-                            <div class="avatar avatar-xs align-middle me-2">
-                              <img class="avatar-img rounded-circle" src="assets/img/avatars/profiles/avatar-3.jpg" alt="...">
-                            </div> <a class="item-name text-reset" href="profile-posts.html">Adolfo Hess</a>
-
-                          </td>
-                
-                          <td>
-
-                            <!-- Email -->
-                            <a class="item-email text-reset" href="mailto:john.doe@company.com">adolfo.hess@company.com</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Phone -->
-                            <a class="item-phone text-reset" href="tel:1-123-456-7890">(968) 682-1364</a>
-
-                          </td>
-                          <td>
-
-                            <!-- Badge -->
-                            <span class="item-score badge text-bg-success-subtle">7/10</span>
-
-                          </td>
-                          <td>
-
-                            <!-- Link -->
-                            <a class="item-company text-reset" href="team-overview.html">Google</a>
-
-                          </td>
-                          <td class="text-end">
-
-                            <!-- Dropdown -->
-                            <div class="dropdown">
-                              <a class="dropdown-ellipses dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fe fe-more-vertical"></i>
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#!" class="dropdown-item">
-                                  Action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Another action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Something else here
-                                </a>
-                              </div>
-                            </div>
-
-                          </td>
+                        <tr *ngIf="!isLoading && !errorMessage && clients.length === 0">
+                          <td colspan="4" class="text-center py-4">Aucun client trouvé.</td>
                         </tr>
-                        <tr>
-                          <td>
 
-                            <!-- Checkbox -->
+                        <tr *ngFor="let client of clients">
+                          <td>
                             <div class="form-check">
-                              <input class="form-check-input list-checkbox" id="listCheckboxFour" type="checkbox">
-                              <label class="form-check-label" for="listCheckboxFour"></label>
+                              <input class="form-check-input list-checkbox" [id]="'client-' + client.id" type="checkbox">
+                              <label class="form-check-label" [for]="'client-' + client.id"></label>
                             </div>
-
                           </td>
                           <td>
-
-                            <!-- Avatar -->
-                            <div class="avatar avatar-xs align-middle me-2">
-                              <img class="avatar-img rounded-circle" src="assets/img/avatars/profiles/avatar-4.jpg" alt="...">
-                            </div> <a class="item-name text-reset" href="profile-posts.html">Daniela Dewitt</a>
-
-                          </td>
-                        
-                          <td>
-
-                            <!-- Email -->
-                            <a class="item-email text-reset" href="mailto:john.doe@company.com">daniela.dewitt@company.com</a>
-
+                            <span class="item-id text-muted">{{ client.id }}</span>
                           </td>
                           <td>
-
-                            <!-- Phone -->
-                            <a class="item-phone text-reset" href="tel:1-123-456-489">(650) 430-9876</a>
-
+                            <span class="item-name text-reset">{{ client.first_name }} {{ client.last_name }}</span>
                           </td>
                           <td>
-
-                            <!-- Badge -->
-                            <span class="item-score badge text-bg-warning-subtle">4/10</span>
-
-                          </td>
-                          <td>
-
-                            <!-- Link -->
-                            <a class="item-company text-reset" href="team-overview.html">Twitch</a>
-
-                          </td>
-                          <td class="text-end">
-
-                            <!-- Dropdown -->
-                            <div class="dropdown">
-                              <a class="dropdown-ellipses dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fe fe-more-vertical"></i>
-                              </a>
-                              <div class="dropdown-menu dropdown-menu-end">
-                                <a href="#!" class="dropdown-item">
-                                  Action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Another action
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                  Something else here
-                                </a>
-                              </div>
-                            </div>
-
+                            <a class="item-email text-reset" [href]="'mailto:' + client.email">{{ client.email }}</a>
                           </td>
                         </tr>
                       </tbody>
