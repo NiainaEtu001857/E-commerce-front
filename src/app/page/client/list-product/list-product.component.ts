@@ -30,6 +30,7 @@ export class ListProductComponent implements OnInit {
   page: number = 1;
   limit: number = 5;
   totalPages: number = 0;
+  private readonly fallbackServiceImage = 'assets/img/logo.svg';
 
   constructor(
     private route: ActivatedRoute,
@@ -117,5 +118,34 @@ export class ListProductComponent implements OnInit {
 
   addToCart(service: any) {
     this.addToCartEvent.emit(service);
+  }
+
+  resolveServicePhoto(photo: string | null | undefined): string {
+    if (!photo) {
+      return this.fallbackServiceImage;
+    }
+
+    const normalized = String(photo).trim();
+    if (!normalized) {
+      return this.fallbackServiceImage;
+    }
+
+    if (/^https?:\/\//i.test(normalized)) {
+      return normalized;
+    }
+
+    if (normalized.startsWith('/public/')) {
+      return `${environment.api}${normalized}`;
+    }
+
+    return `${environment.api}/public/${normalized.replace(/^\/+/, '')}`;
+  }
+
+  onServicePhotoError(event: Event): void {
+    const element = event.target as HTMLImageElement | null;
+    if (!element) {
+      return;
+    }
+    element.src = this.fallbackServiceImage;
   }
 }

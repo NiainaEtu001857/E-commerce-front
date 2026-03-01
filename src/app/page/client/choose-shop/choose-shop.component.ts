@@ -26,6 +26,7 @@ export class ChooseShopComponent implements OnInit {
   page: number = 1;
   limit: number = 12;
   totalPages: number = 0;
+  private readonly fallbackShopImage = 'assets/img/logo.svg';
 
   constructor(
     private router: Router,
@@ -88,5 +89,34 @@ export class ChooseShopComponent implements OnInit {
 
   viewShop(shopId: any): void {
     this.router.navigate(['/client/shop', shopId]);
+  }
+
+  resolveShopPhoto(photo: string | null | undefined): string {
+    if (!photo) {
+      return this.fallbackShopImage;
+    }
+
+    const normalized = String(photo).trim();
+    if (!normalized) {
+      return this.fallbackShopImage;
+    }
+
+    if (/^https?:\/\//i.test(normalized)) {
+      return normalized;
+    }
+
+    if (normalized.startsWith('/public/')) {
+      return `${environment.api}${normalized}`;
+    }
+
+    return `${environment.api}/public/${normalized.replace(/^\/+/, '')}`;
+  }
+
+  onShopPhotoError(event: Event): void {
+    const element = event.target as HTMLImageElement | null;
+    if (!element) {
+      return;
+    }
+    element.src = this.fallbackShopImage;
   }
 }

@@ -6,7 +6,8 @@
       <div class="card h-100 shadow-sm">
 
         <!-- Image produit -->
-        <img [src]="service.photo || 'assets/img/default-product.png'"
+        <img [src]="resolveServicePhoto(service.photo)"
+             (error)="onServicePhotoError($event)"
              class="card-img-top img-fluid"
              style="height: 180px; object-fit: cover;"
              alt="{{ service.name }}">

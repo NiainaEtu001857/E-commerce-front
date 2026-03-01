@@ -68,6 +68,11 @@ export class AjouterComponent {
       return;
     }
 
+    if (!this.productForm.image) {
+      alert('Veuillez ajouter une photo du produit.');
+      return;
+    }
+
     const minQuantity = Number(this.productForm.min_quantity?? 1);
     if (!Number.isFinite(minQuantity) || minQuantity <= 0) {
       alert('La quantité minimal de la commande doit etre superieur a 0.');
@@ -92,26 +97,23 @@ export class AjouterComponent {
       }))
       .filter((attr) => attr.key.length > 0 && attr.value.length > 0);
 
-    const payload = {
-      name: this.productForm.name.trim(),
-      type: this.productForm.category,
-      min_quantity: this.productForm.min_quantity,
-      sale_price: salePrice,
-      base_unity: this.productForm.base_unity || 'Unité',
-      detail: this.productForm.description?.trim() || null,
-      image_name: this.productForm.image?.name || null,
-      attributes: cleanedAttributes,
-    };
-    console.log(payload);
+    const formData = new FormData();
+    formData.append('name', this.productForm.name.trim());
+    formData.append('type', this.productForm.category);
+    formData.append('min_quantity', String(minQuantity));
+    formData.append('sale_price', String(salePrice));
+    formData.append('base_unity', this.productForm.base_unity || 'Unite');
+    formData.append('detail', this.productForm.description?.trim() || '');
+    formData.append('photo', this.productForm.image, this.productForm.image.name);
+    formData.append('attributes', JSON.stringify(cleanedAttributes));
 
     this.isSubmitting = true;
     try {
       await firstValueFrom(
         this.http
-          .post(`${environment.api}/shop/service/add`, payload, {
+          .post(`${environment.api}/shop/service/add`, formData, {
             headers: new HttpHeaders({
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
             }),
           })
           .pipe(timeout(15000))
